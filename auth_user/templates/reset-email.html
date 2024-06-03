@@ -3,8 +3,8 @@
 
 {% block content %}
 
-  <!-- api's-->
-  <script src="{% static 'js/auth/sign-in.js' %}"></script>
+  <script src="{% static 'js/auth/common.js' %}"></script>
+  <script src="{% static 'js/auth/forgot-email.js' %}"></script>
 
   <!--start wrapper-->
   <div class="wrapper-auth">
@@ -12,7 +12,8 @@
       <div class="col-xl-6 col-md-12">
         <div class="login-cover-img d-flex align-items-end justify-content-end ">
           <div class="w-75 mb-4 me-4 p-4 rounded auth-content">
-            <p class="text-white ">Literally it does not mean anything. It is a sequence of words without a sense of Latin derivation that
+            <p class="text-white ">Literally it does not mean anything. It is a sequence of words without a sense of
+              Latin derivation that
               make up a text also known as filler text, fictitious, blind or placeholder</p>
           </div>
         </div>
@@ -21,8 +22,8 @@
         <div class="login-cover-wrapper">
           <div class="shadow-none">
             <img src="{% static 'images/icons/logo.png' %}" alt="" width="150" class="mb-4" />
-            <h1 class="fw-semibold mb-5">Login Here </h1>
-            
+            <h1 class="fw-semibold mb-5">Forgot password?</h1>
+
             <!-- Error message -->
             <div id="errorMessage" style="display: none;" class="col-12 alert alert-danger mt-3" role="alert">
               <!-- Error message will appear here -->
@@ -38,30 +39,16 @@
                 <input type="email" class="form-control p-2" id="inputEmail">
                 <span id="emailError" class="text-danger error-message"></span>
               </div>
-              <div class="col-12">
-                <label for="inputPassword" class="form-label fw-medium text-dark-color">Password</label>
-                <input type="password" class="form-control p-2" id="inputPassword">
-                <span id="passwordError" class="text-danger error-message"></span>
-              </div>
-
-              <div class="col-12 col-lg-6">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckRemember">
-                  <label class="form-check-label" for="flexSwitchCheckRemember">Remember Me</label>
-                </div>
-              </div>
-              <div class="col-12 col-lg-6 text-end">
-                <a class="text-primary" href="{% url 'forgot-email' %}">Forgot Password?</a>
-              </div>
               <div class="col-12 col-lg-12">
-                <div class="d-grid">
-                  <button type="button" id="submitBtn" class="btn bg-main text-white p-2">Sign In</button>
-                </div>
+                <a class="w-100 d-block text-decoration-none">
+                  <div class="d-grid ">
+                    <button type="button" id="submitBtn" class="btn bg-main text-white p-2">Submit</button>
+                  </div>
+                </a>
               </div>
 
-              <div class="col-12 col-lg-12 text-center">
-                <p class="mb-0">Don't have an account? <a class="text-primary font-14 fw-medium"
-                    href="{% url 'signup' %}">Sign up</a></p>
+              <div class="col-12 col-lg-12 text-center"><a class="text-main " href="{% url 'login' %}">Back to login</a>
+                </p>
               </div>
             </form>
           </div>
@@ -69,13 +56,8 @@
       </div>
 
     </div>
-    <!--end row-->  
+    <!--end row-->
   </div>
   <!--end wrapper-->
+  
 {% endblock %}
-
-
-
-<!-- Mirrored from codervent.com/fobia/demo/ltr/sign-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 May 2024 09:36:12 GMT -->
-
-</html>

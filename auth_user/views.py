@@ -213,6 +213,8 @@ class ForgotPassword(APIView):
         # Check the request path to determine which template to render
         if 'forgot-otp' in request.path:
             return render(request, 'otp-verfication.html')
+        elif 'forgot-email' in request.path:
+            return render(request, 'reset-email.html')
         else:
             return render(request, 'reset-password.html')
     
@@ -221,10 +223,10 @@ class ForgotPassword(APIView):
         
         # Prepare data for the change password request
         data = {
-            'email':  data.get('email'),
-            'password': data.get('password'),
-            'otp': data.get('otp'),
-            'confirm_password': data.get('confirm_password')
+            'email': str(data.get('email')),
+            'password': str(data.get('password')),
+            'otp': str(data.get('otp')),
+            'confirm_password': str( data.get('confirmPassword'))
         }
         
         # Make a POST request to the FastAPI microservice
@@ -250,4 +252,12 @@ class Dashboard(APIView):
     def get(self, request):
         # Render the HTML template for verify user
         return render(request, 'index.html')
-        
+    
+
+class ForgotPawwordSucess(APIView):
+    """
+    API endpoint for render forgot password sucess.html.
+    """
+    def get(self, request):
+        # Render the HTML template for verify user
+        return render(request, 'forgot-sucess.html')

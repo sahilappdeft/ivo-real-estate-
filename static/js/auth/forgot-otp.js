@@ -14,52 +14,32 @@ $(document).ready(function () {
         return urlParams.get('email');
     }
 
-    function decodeEmail(encodedEmail) {
-        let decodedEmail = '';
-        for (let i = 0; i < encodedEmail.length; i++) {
-          decodedEmail += String.fromCharCode(encodedEmail.charCodeAt(i) - 1);
-        }
-        return decodedEmail;
-    }
-
     // Event listener for form submission
     $('#submitbtn').click(function () {
         event.preventDefault(); // Prevent the default form submission
 
         // Get email and OTP
         var email = getEmailFromUrl();
-        var decodeMail = decodeEmail(email);
-        console.log(decodeMail, ":::POO")
-
         var otp = getOtp();
-        // AJAX request
-        $.ajax({
-            url: 'http://127.0.0.1:8000/api/auth/verify-email/',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                email: decodeMail,
-                otp: otp
-            }),
-            success: function(response) {
-                console.log('Verification successful');
-                $("#successMessage").text(response.message).fadeIn().delay(3000).fadeOut(); // Display success message and fade out after 3 seconds
-                $("#errorMessage").hide(); // Hide error message if it's currently displayed
-                $("#successMessage").show(); // Show success message
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText); // Log the error response to the console
-                $("#errorMessage").text('OTP Invalid. Please try again.').fadeIn(); // Show error message
-                $("#successMessage").hide(); // Hide success message if it's currently displayed
-                $("#errorMessage").show(); // Show error message
-            }
+
+        // Check for empty input fields
+        var emptyFields = $('.otp').filter(function() {
+            return $(this).val() === '' 
         });
+
+        if (emptyFields.length > 0) {
+            $('#emailError').text('Please fill in all OTP fields.');
+            return; // Stop further execution
+        }
+
+        // Redirect to verification page with user email as query parameter
+        window.location.href = 'http://127.0.0.1:8000/api/auth/forgot-password/?email=' + email+'&otp='+otp;
+
     });
 
     // Function to handle resend link click
     $("#resendLink").on("click", function(event) {
         event.preventDefault(); // Prevent the default behavior of the link
-        
         // Get the email address from the user 
         var email = getEmailFromUrl();
         var decodeMail = decodeEmail(email);
@@ -72,7 +52,7 @@ $(document).ready(function () {
         // Send AJAX request to the API endpoint
         $.ajax({
           type: 'POST',
-          url: 'http://127.0.0.1:8000/api/auth/send-otp/verify/',
+          url: 'http://127.0.0.1:8000/api/auth/send-otp/forgot/',
           data: postData, // Send email data as JSON
           dataType: 'json', // Specify JSON as the expected response type
           success: function(response) {
