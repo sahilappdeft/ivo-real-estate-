@@ -1,0 +1,84 @@
+{% extends "auth-base.html" %}
+{% load static %}
+
+{% block content %}
+
+   <!-- Conditional JS loading based on URL -->
+   <script>
+    const currentUrl = window.location.href;
+    if (currentUrl.includes('/api/auth/forgot-otp/')) {
+      const script = document.createElement('script');
+      script.src = "{% static 'js/auth/forgot-otp.js' %}";
+      document.head.appendChild(script);
+    } else {
+      const script = document.createElement('script');
+      script.src = "{% static 'js/auth/verification.js' %}";
+      document.head.appendChild(script);
+    }
+  </script>
+
+    <!--start wrapper-->
+    <div class="wrapper-auth">
+        <div class="row login-container g-0 m-0">
+            <div class="col-xl-6 col-md-12">
+                <div class="login-cover-img d-flex align-items-end justify-content-end ">
+                    <div class="w-75 mb-4 me-4 p-4 rounded auth-content">
+                        <p class="text-white ">Literally it does not mean anything. It is a sequence of words without a
+                            sense of
+                            Latin derivation that
+                            make up a text also known as filler text, fictitious, blind or placeholder</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-12 p-5 ">
+                <div class="login-cover-wrapper">
+                    <div class="shadow-none">
+                        <img src="{% static 'images/icons/logo.png' %}" alt="" width="150" class="mb-4" />
+                        <h1 class="fw-semibold mb-4">We have sent a code to your email</h1>
+                        <p class="font-14 mb-4 text-gray-color">Enter the 6-digit verification code sent to
+                            z****@gmail.com</p>
+                        <form class="form-body row g-3">
+                            <div class="d-inline-flex justify-content-start w-75 gap-3">
+                                <input type="text" class="form-control p-2 otp" id="otp1">
+                                <input type="text" class="form-control p-2 otp" id="otp2">
+                                <input type="text" class="form-control p-2 otp" id="otp3">
+                                <input type="text" class="form-control p-2 otp" id="otp4">
+                                <input type="text" class="form-control p-2 otp" id="otp5">
+                                <input type="text" class="form-control p-2 otp" id="otp6">
+
+                            </div>
+                            <!-- Error message -->
+                            <div id="errorMessage" style="display: none;" class="col-12 alert alert-danger mt-3" role="alert">
+                                <!-- Error message will appear here -->
+                            </div>
+                             <!-- Success message -->
+                            <div id="successMessage" style="display: none;" class="col-12 alert alert-success mt-3" role="alert">
+                                <!-- Success message will appear here -->
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <a href="" class="w-100 d-block text-decoration-none">
+                                    <div class="d-grid ">
+                                        <button type="button" id="submitbtn" class="btn bg-main text-white p-2">Submit</button>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-12 col-lg-12 ">
+                                <p class="mb-0 font-14 mb-3">Didn’t receive the code! 52S <a
+                                        class="text-main font-14 fw-medium"
+                                        id="resendLink"
+                                        href="#">Resend</a></p>
+                                <p class="mb-0 font-14">If you don’t see the email in your inbox, check your spam
+                                    folder.</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--end row-->
+    </div>
+    <!--end wrapper-->
+
+{% endblock %}

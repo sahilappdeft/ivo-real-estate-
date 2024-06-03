@@ -1,0 +1,10 @@
+venv/
+media/
+staticfiles/
+static/*
+**/migrations/*
+!**/migrations/__init__.py
+**/__pycache__/
+db.*
+db.sqlite3/
+.env
