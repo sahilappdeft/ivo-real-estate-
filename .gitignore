@@ -1,7 +1,5 @@
 venv/
 media/
-staticfiles/
-static/*
 **/migrations/*
 !**/migrations/__init__.py
 **/__pycache__/
