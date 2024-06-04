@@ -6,7 +6,20 @@ DEBUG = True
 # ALLOWED_HOSTS = ['your_production_domain.com']
 
 # Database settings for PostgreSQL
-DATABASES = {
+
+if os.getcwd() == "/home/ubuntu/IVO":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'ivodb',
+            'USER': 'ivoportal',
+            'PASSWORD': 'Psdnj@Eecezc3233r',
+            'HOST': '13.202.134.230',
+            'PORT': '5432',
+        }
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
