@@ -14,5 +14,4 @@ urlpatterns = [
     path('forgot-email/', views.ForgotPassword.as_view(), name='forgot-email'),
     path('forgot-password-sucess/', views.ForgotPawwordSucess.as_view(), name='forgot-sucess'),
     
-    path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
 ]

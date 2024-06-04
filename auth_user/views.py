@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from utility.helpers import success, error, call_auth_microservice
+from utility.helpers import success, error
+from .utilis import call_auth_microservice
 from utility.emailTemplates import send_verify_email, send_forgot_password_email
 from .models import CustomUser
 from .permission import IsTokenValid
@@ -241,17 +242,6 @@ class ForgotPassword(APIView):
         else:
             error_message = response.json().get('detail', 'Unknown error')
             return Response({"error": error_message}, status=response.status_code)
-
-
-        
-class Dashboard(APIView):
-    """
-    API endpoint for change user password with otp.
-    """
-    
-    def get(self, request):
-        # Render the HTML template for verify user
-        return render(request, 'index.html')
     
 
 class ForgotPawwordSucess(APIView):
@@ -261,3 +251,21 @@ class ForgotPawwordSucess(APIView):
     def get(self, request):
         # Render the HTML template for verify user
         return render(request, 'forgot-sucess.html')
+    
+    
+class SetupAccount(APIView):
+    def post(self, request, *args, **kwargs):
+        
+        # get invite employe objet
+        
+        # get emil from emlye object and get other user detail from request.data
+        
+        # hit auth microservice sign-up data
+        
+        # create user object here
+        
+        # get employe from that user
+        
+        # crate employeoffice object with emplye role and office 
+        
+        pass

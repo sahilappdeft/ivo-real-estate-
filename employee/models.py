@@ -1,5 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import Permission
+from django.db.models.signals import post_save
+
+
+class BulkCreateManager(models.Manager):
+    def bulk_creatBulkCreateManagere(self, objs, **kwargs):
+        created_objs = super().bulk_create(objs, **kwargs)
+        for obj in created_objs:
+            post_save.send(sender=obj.__class__, instance=obj, created=True)
+        return created_objs
+
 
 # Create your models here.
 class Employee(models.Model):
@@ -37,6 +47,9 @@ class InviteEmployee(models.Model):
     role = models.ForeignKey('EmployeeRole', on_delete=models.CASCADE,
                               related_name='invite_role')
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending')
+    
+    objects = BulkCreateManager()
+
 
 
 class RolePermissiom(models.Model):

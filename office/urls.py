@@ -1,10 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import OfficeViewSet
+from .views import*
 
-router = DefaultRouter()
-router.register(r'offices', OfficeViewSet)
+app_name = 'office'
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('offices/', OfficeApiView.as_view(), name='office-list'),
 ]

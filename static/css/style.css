@@ -1,5 +1,3 @@
-
-
 body {
     color: #4c5258;
     font-size: 14px;
@@ -12,6 +10,7 @@ body {
 ::placeholder {
     opacity: 0.5 !important;
 }
+
 
 .wrapper {
     position: relative;
@@ -1355,10 +1354,16 @@ ul.categories-list li {
     color: #333333;
     position: relative;
 }
-.text-gray-color{
+
+.bg-lightest {
+    background-color: #F8F9FE;
+}
+
+.text-gray-color {
     color: #787878;
 }
-.font-14{
+
+.font-14 {
     font-size: 14px;
 }
 
@@ -1374,16 +1379,20 @@ ul.categories-list li {
 .text-dark-color {
     color: #333333;
 }
-.text-light-gray{
+
+.text-light-gray {
     color: #8E8E8E;
 }
-.text-main{
+
+.text-main {
     color: #0094DA;
 }
+
 .bg-main {
     background: #0094DA !important;
 }
-.auth-content{
+
+.auth-content {
     background: rgb(75 75 75 / 61%);
     backdrop-filter: blur(2px);
 }
@@ -1410,6 +1419,17 @@ ul.categories-list li {
     line-height: 18px;
     text-align: center;
 
+}
+
+/* header */
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.header {
+    box-shadow: 0px 4px 29px 0px #E7E7E740;
 }
 
 .menu-bar {
@@ -1442,8 +1462,111 @@ ul.categories-list li {
     margin-top: 12rem;
 }
 
+/* register steps */
+.step-indicator {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 5px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #0094DA;
+    border-radius: 50%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    width: 68px;
+    z-index: 0;
+    height: 1px;
+    border: 1px dashed #0094DA;
+    top: 48%;
+    left: 30px;
+}
+.step-indicator:nth-last-child(1)::before{
+    display: none;
+}
+
+.indicators-step {
+    gap: 60px;
+}
+
+.step-indicator.active {
+    background-color: #0094DA;
+    color: #fff;
+}
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
 
 
+/* financial table */
+
+.financial-table {
+    border: 1px solid #F8F9FE;
+    width: 100%;
+}
+
+.financial-table thead {
+    background-color: #F8F9FE;
+}
+
+.financial-table thead th,
+.financial-table tbody td {
+    padding: 15px;
+}
+
+.rotate-90 {
+    transform: rotate(45deg);
+}
+
+.chip {
+    display: inline-block;
+    padding: 0 10px;
+    margin: 5px;
+    font-size: 14px;
+    line-height: 32px;
+    border-radius: 10px;
+    background-color: #E7F8FF;
+    color: #0094DA;
+}
+
+.chip .close-btn {
+    margin-left: 10px;
+    cursor: pointer;
+}
+/* select role */
+.profile-role {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #D3D3D3;
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+}
+.active-role {
+    border-color: #0094DA;
+}
+.preview-heading{
+    color: #464E5F;
+}
+.preview-data{
+    color: #212348;
+}
+#previewmodal .modal-footer button{
+    width: 48%;
+}
 /* Responsive */
 
 @media screen and (max-width: 1200px) {

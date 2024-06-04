@@ -71,3 +71,19 @@ def send_forgot_password_email(subject, recipients, password_reset_link, user_na
     except Exception as e:
         print(e)
         return False
+    
+
+def send_invite_employee_email(subject, recipient_email, token):
+    try:
+        html_content = render_to_string('email-templates/email-verification.html', {'link': token})
+        text_content = strip_tags(html_content)
+
+        msg = commonEmailInitialize(subject, [recipient_email], text_content)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        print('Email sent')
+        return True
+    except Exception as e:
+        print(e)
+        return False

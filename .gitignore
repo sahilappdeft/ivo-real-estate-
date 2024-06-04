@@ -6,3 +6,6 @@ media/
 db.*
 db.sqlite3/
 .env
+staticfiles/
+static-old/
+static/

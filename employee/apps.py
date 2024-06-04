@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class AuthUserConfig(AppConfig):
+class OfficeConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'auth_user'
-
+    name = 'employee'
+    
     def ready(self):
-        import auth_user.signals  # Import signals module
+        import employee.signals  # Import signals module
