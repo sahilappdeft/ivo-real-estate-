@@ -10,8 +10,7 @@ function stateChange(key, value) {
 
 accounts = []
 function addAccounts(){
-    account = {
-    }
+    account = {}
     // Append the account object to the accounts list
     accounts.push(account)
    return account
@@ -37,3 +36,7 @@ function stateAccount(id, value, key){
     console.log(accounts, "getAfterHyphen")
 }
 
+invite
+function StateinviteEmployee(key, value){
+
+}
