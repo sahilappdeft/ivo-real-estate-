@@ -14,7 +14,7 @@ if os.getcwd() == "/home/ubuntu/IVO":
             'NAME': 'ivodb',
             'USER': 'ivoportal',
             'PASSWORD': 'Psdnj@Eecezc3233r',
-            'HOST': '13.202.134.230',
+            'HOST': 'localhost',
             'PORT': '5432',
         }
     }
