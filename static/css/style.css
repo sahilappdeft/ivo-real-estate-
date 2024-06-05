@@ -1681,3 +1681,13 @@ ul.categories-list li {
         height: auto;
     }
 }
+
+.error-message {
+    display: none; 
+    color: red;
+    font-size: 12px;
+    transition: opacity 0.3s ease;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+}
