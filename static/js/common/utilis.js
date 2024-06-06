@@ -42,6 +42,6 @@ function decodeEmail(encodedEmail) {
 
 $(document).ready(function() {
   $(".form-control").each(function() {
-      $(this).after("<span class='error-message text-danger'></span>");
+      $(this).after("<span class='error-message text-danger'>hi</span>");
   });
 });

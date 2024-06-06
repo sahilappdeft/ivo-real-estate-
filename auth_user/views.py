@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,6 +24,7 @@ class RegisterUser(APIView):
         # Render the HTML template for register user
         return render(request, 'sign-up.html')
     
+    @csrf_exempt
     def post(self, request):
         print("::::::::::::::::::::::::::::::::OPOPOPOPO")
         data = request.data
@@ -72,6 +74,7 @@ class VerifyEmail(APIView):
         # Render the HTML template for verify user
         return render(request, 'otp-verfication.html')
     
+    @csrf_exempt
     def post(self, request):
         data = request.data
 
@@ -106,6 +109,7 @@ class Login(APIView):
         # Render the HTML template for login password
         return render(request, 'sign-in.html')
     
+    @csrf_exempt
     def post(self, request):
         data = request.data
 
@@ -119,12 +123,22 @@ class Login(APIView):
 
         #hit request to auth microservice
         response = call_auth_microservice('/login', data)
+        
+        print(response, ":::::::::::OOO")
 
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
-            # Registration Successful
-            return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
+            # get user from database and add in request.user
+            print(response_data, "response_data response_dataresponse_data")
+            user_id = response_data['user']['id']
+            user = CustomUser.objects.filter(user_id=user_id).first()
+            if user:
+                request.user = user
+                # Registration Successful
+                return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')
@@ -137,6 +151,7 @@ class ChangePassword(APIView):
     """
     permission_classes = (IsTokenValid,)
     
+    @csrf_exempt
     def post(self, request):
         data = request.data
         # Extract token from the request header
@@ -169,6 +184,7 @@ class SendOtp(APIView):
     reset his password.
     """
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         data = request.data
         otp_type = self.kwargs.get('type')
@@ -219,6 +235,7 @@ class ForgotPassword(APIView):
         else:
             return render(request, 'reset-password.html')
     
+    @csrf_exempt
     def post(self, request):
         data = request.data
         
@@ -252,20 +269,43 @@ class ForgotPawwordSucess(APIView):
         # Render the HTML template for verify user
         return render(request, 'forgot-sucess.html')
     
-    
+
+from employee.models import InviteEmployee, EmployeeOffice
 class SetupAccount(APIView):
     def post(self, request, *args, **kwargs):
         
-        # get invite employe objet
+        data = request.data
+        # get invite employee objet
+        invite_token = self.kwargs.get('token')
+        invite_employe = InviteEmployee.objects.filter(token=invite_token).first()
         
-        # get emil from emlye object and get other user detail from request.data
+        if invite_employe:
+            email = invite_employe.recipient_email
         
-        # hit auth microservice sign-up data
-        
-        # create user object here
-        
-        # get employe from that user
-        
-        # crate employeoffice object with emplye role and office 
-        
-        pass
+            data['email'] = email
+            data['email_verified'] = True
+            #hit request to auth microservice
+            response = call_auth_microservice('/signup', data)
+
+            # Check if the response is successful
+            if response.status_code == 200:
+                response_data = response.json()
+                user_id = response_data.get('id')
+                #create user wih response User-ID.
+                user = CustomUser.objects.create(user_id=user_id, role="employee")
+                
+                # get employee obj
+                employee = user.employee
+                # create employe office object
+                EmployeeOffice.objects.create(employee=employee,
+                                            office=invite_employe.sender,
+                                            role=invite_employe.role
+                                            )
+                # set-up sucessfully
+                return Response({"message": "Account Set-up Successfully"}, status=status.HTTP_200_OK)
+            else:
+                # Return error from the authentication microservice
+                error_message = response.json().get('detail', 'Unknown error')
+                return Response({"error": error_message}, status=response.status_code)
+        else:
+            return Response({"error": "Invalid invitation"}, status=status.HTTP_401_UNAUTHORIZED)

@@ -2,21 +2,19 @@ var formData = {
     "office-name": "",
     "office-purpose":""
 }
-var invite_employees = []
+var invite_employees = {}
 var employee = {}
-var accounts = []
+var accounts = {}
 
 function stateChange(key, value, id) {
     formValidation(key, value, id)
     formData[key] = value
-    console.log(formData, "formData")
 }
 
-function addAccounts(){
+function addAccounts(counter){
     account = {}
     // Append the account object to the accounts list
-    accounts.push(account)
-   return account
+    accounts[counter.toString()]=account
 }
 
 function getAfterHyphen(str) {
@@ -35,49 +33,109 @@ function getAfterHyphen(str) {
 function stateAccount(id, value, key){
     index = getAfterHyphen(id)
     accounts[index][key] = value
-    console.log(accounts, "getAfterHyphen")
-    console.log(accounts, "account accunts")
 }
  
 function StateinviteEmployee(index, key, value){
-    isValid = formValidation(key, value, "chip-input")
-    console.log(index, key, value, ":PPPPPPPPPPPPPPPPPPP")
+    isValid = formValidation("email", value, "chip-input")
     if(isValid){
-        invite_employees[index][key]=value
+        invite_employees[index.toString()][key]=value
 
     }
-    console.log(invite_employees,"invite_employees")
     return isValid
 }
 
 function getEmployeeRole(){
-    var index = invite_employees.length - 1
+    // Get an array of object keys
+    var keysArray = Object.keys(invite_employees);
+    // Access the last key of the array
+    var lastKey = keysArray[keysArray.length - 1];
     var value = activeRoleName = $('.profile-role.active-role').attr('name');
-    invite_employees[index]['role']=value
+    invite_employees[lastKey]['role']=value
     employee = {}
 }
 
 
 function cancelInviteEmployee(id){
-    console.log(id, "idididididdidid")
     index = getAfterHyphen(id)
-    console.log(index, "indexindexindexindex")
-    invite_employees.splice(index, 1);
-    console.log(invite_employees, "invite_employeesinvite_employeesinvite_employees")
+    delete invite_employees[index]
 }
 
 function removeBankAccount(id){
     index = getAfterHyphen(id)
-    accounts.splice(index, 1);
-    console.log(accounts, "removeBankAccount removeBankAccount")
+    delete accounts[index]
 }
 
 
 function PostOfficeForm(){
-    data = {
+    var accounts_data = Object.values(accounts);
+    var invite_employees_data =  Object.values(invite_employees);
+    var data = {
         "office": formData,
-        "bank_accounts": accounts,
-        "invite_employee": invite_employees
+        "bank_accounts": accounts_data,
+        "invite_employee": invite_employees_data
+    };
+    console.log(data, "datdatatada");
+
+    // Retrieve token from local storage
+    var accessToken = localStorage.getItem('access_token');
+    console.log(accessToken, "accessToken")
+    $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/api/office/offices/',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        dataType: 'json',
+        beforeSend: function(xhr) {
+            // Include token in the request header
+            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        },
+        success: function(response) {
+            console.log('POST request successful:', response);
+            // Handle success response
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending POST request:', error);
+            // Handle error response
+        }
+    });
+}
+
+
+function companyRole(){
+
+    // Retrieve token from local storage
+    var accessToken = localStorage.getItem('access_token');
+    $.ajax({
+        type: 'GET',
+        url: 'http://127.0.0.1:8000/api/office/roles/',
+        beforeSend: function(xhr) {
+            // Include token in the request header
+            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        },
+        success: function(response) {
+            console.log('GET request successful:', response);
+            // Handle success response
+            updateProfileRoles(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending GET request:', error);
+            // Handle error response
+        }
+    });
+}
+
+function updateProfileRoles(roles) {
+    // Get all div elements with the class 'profile-role'
+    var profileRoles = document.querySelectorAll('.profile-role');
+
+    // Ensure the number of roles matches the number of profile-role elements
+    if (roles.length !== profileRoles.length) {
+        console.error('Mismatch between roles and profile-role elements');
+        return;
     }
-    console.log(data, "datdatatada")
+
+    // Loop through each profile-role element and update the name attribute
+    roles.forEach((role, index) => {
+        profileRoles[index].setAttribute('name', role.id);
+    });
 }

@@ -17,7 +17,7 @@ function formValidation(key, value, id) {
         case "iban":
         case "bic":
             if (value === "") {
-                errorMessage.text("Field is required").css("display", "block");
+                errorMessage.text("Field is required").css("visibility", "visible");
                 isValid = false
             } else {
                 errorMessage.text("");
@@ -27,7 +27,7 @@ function formValidation(key, value, id) {
         case "purpose":
             if (value === "") {
                 console.log("DADASDAASDS")
-                errorMessage.text("Please select appropriate purpose").css("display", "block");
+                errorMessage.text("Please select appropriate purpose").css("visibility", "visible");
                 isValid = false
             } else {
                 errorMessage.text("");
@@ -40,7 +40,7 @@ function formValidation(key, value, id) {
                 errorMessage.text("Field is required").css("display", "block"); 
                 isValid = false
             } else if(!validateEmail(value)){
-                errorMessage.text("Please enter a valid email address.").css("display", "block");
+                errorMessage.text("Please enter a valid email address.").css("visibility", "visible");
                 isValid = false
             }else {
                 errorMessage.text("");

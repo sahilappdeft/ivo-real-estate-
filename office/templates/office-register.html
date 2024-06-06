@@ -185,15 +185,15 @@
                                     <div class="form-group mb-3">
                                         <label class="font-14 fw-semibold text-black mb-1" for="office-name">Cost
                                             Centre</label>
-                                        <input type="text" class="form-control" id="cost-center" name="cost-center"
-                                            placeholder="Enter Cost Center", oninput="stateChange(this.id, this.value)">
+                                        <input type="text" class="form-control" id="cost-center" name="cost_center"
+                                            placeholder="Enter Cost Center", oninput="stateChange(this.name, this.value, this.id)">
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h2 class="text-main fs-5 fw-semibold">Add Bank Accounts</h2>
                                 <button type="button" class="btn fs-6 fw-normal py-2 bg-main text-white px-5"
-                                    id="add-financial-fields", onclick="addAccounts()">Add</button>
+                                    id="add-financial-fields">Add</button>
                             </div>
                             <table class="financial-table">
                                 <thead>
@@ -283,13 +283,13 @@
                     </p>
 
                     <div class="d-flex justify-content-center gap-3">
-                        <div class="profile-role active-role" name="admin">
+                        <div class="profile-role active-role" name=1>
                             <img src="{% static 'images/authentication/admin.png' %}" alt="" style="width:70%" />
                         </div>
-                        <div class="profile-role" name="backend">
+                        <div class="profile-role" name=1>
                             <img src="{% static 'images/authentication/backend.png' %}" alt="" style="width:80%" />
                         </div>
-                        <div class="profile-role" name="social-worker">
+                        <div class="profile-role" name=1>
                             <img src="{% static 'images/authentication/social-worker.png' %}" alt="" style="width:80%" />
                         </div>
                     </div>

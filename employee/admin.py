@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import InviteEmployee, EmployeeRole, EmployeeOffice, Employee
+from .models import InviteEmployee, EmployeeOffice, Employee
 # Register your models here.
 
 admin.site.register(InviteEmployee)
-admin.site.register(EmployeeRole)

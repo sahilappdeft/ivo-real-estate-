@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import Permission
 
 #Choices for employee role
 ROLE_CHOICES = [
@@ -43,7 +44,7 @@ class Office(models.Model):
     zipcode = models.CharField(max_length=255, null=False, blank=False)
     city_division = models.CharField(max_length=255, null=False, blank=False)
     country = models.CharField(max_length=100, null=False, blank=False)
-    Office_email = models.EmailField(null=False, blank=False)
+    office_email = models.EmailField(null=False, blank=False)
     phone_number = models.CharField(max_length=15, null=False, blank=False)
     cost_center = models.CharField(max_length=255, null=False, blank=False)
     office_type = models.CharField(max_length=100, choices=OFFICE_TYPE_CHOICES,
@@ -64,3 +65,20 @@ class BankAccounts(models.Model):
     owner_name = models.CharField(max_length=255, null=False, blank=False)
     iban =  models.CharField(max_length=50, null=False, blank=False)
     bic = models.CharField(max_length=50, null=False, blank=False)
+    
+
+class RolePermissiom(models.Model):
+    office = models.ForeignKey("Office", on_delete=models.CASCADE, 
+                               related_name='office_role_permissions')
+    role = models.ForeignKey('CompanyRole', on_delete=models.CASCADE, 
+                             related_name='role_permission')
+    permission = models.ManyToManyField(Permission)
+    
+    class Meta:
+        unique_together = ('office', 'role')
+        
+
+class CompanyRole(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+    Company = models.ForeignKey('Company', on_delete=models.CASCADE, null=False,
+                                blank=False, related_name='company_role')

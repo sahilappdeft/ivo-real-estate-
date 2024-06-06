@@ -1683,7 +1683,7 @@ ul.categories-list li {
 }
 
 .error-message {
-    display: none; 
+    visibility: hidden; 
     color: red;
     font-size: 12px;
     transition: opacity 0.3s ease;

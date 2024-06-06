@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
     
+    // call company role api 
+    companyRole()
     var counter_email = 0
     // chips
     $('#chip-input').on('keypress', function (e) {
@@ -17,8 +19,8 @@ $(document).ready(function () {
                     $(this).val('');
                     
                     //add email to state
-                    invite_employees.push(employee)
-                    emailValid = StateinviteEmployee(counter_email, "email", text)
+                    invite_employees[counter_email.toString()]=employee
+                    emailValid = StateinviteEmployee(counter_email, "recipient_email", text)
                     counter_email += 1
                 
                     // Trigger the select role modal here
@@ -67,6 +69,9 @@ $(document).ready(function () {
                     </tr>`;
 
         $('#financial-table-form').append(html)
+
+        // add tr to state
+        addAccounts(counter)
         counter += 1
     });
 
@@ -90,7 +95,6 @@ $(document).ready(function () {
             console.log(isValid, "under iteration input")
     
         });
-
         console.log(isValid, "isValid isValid")
         if (isValid){
             var nextStep = $(this).data('next');

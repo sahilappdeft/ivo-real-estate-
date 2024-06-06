@@ -10,8 +10,8 @@ class CustomUser(models.Model):
         ('employee', 'Employee'),
     )
 
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100, null=True)
+    last_name = models.CharField(max_length=100, null=True)
     user_id = models.IntegerField(null=False, blank=False)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES,
                             default="company", null=False, blank=False)

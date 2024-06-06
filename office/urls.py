@@ -6,4 +6,6 @@ app_name = 'office'
 
 urlpatterns = [
     path('offices/', OfficeApiView.as_view(), name='office-list'),
+    path('roles/', CompanyRoleApiView.as_view(), name='office-list'),
+
 ]
