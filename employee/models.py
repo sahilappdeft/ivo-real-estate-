@@ -23,8 +23,8 @@ class EmployeeOffice(models.Model):
     role = models.ForeignKey('office.CompanyRole', on_delete=models.CASCADE,
                               related_name='employee_role')
 
-    class Meta:
-        unique_together = ('employee', 'office', 'role')
+    # class Meta:
+    #     unique_together = ('employee', 'office', 'role')
 
 
 class InviteEmployee(models.Model):
