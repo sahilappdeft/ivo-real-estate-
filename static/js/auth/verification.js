@@ -46,6 +46,8 @@ $(document).ready(function () {
                 $("#successMessage").text(response.message).fadeIn().delay(3000).fadeOut(); // Display success message and fade out after 3 seconds
                 $("#errorMessage").hide(); // Hide error message if it's currently displayed
                 $("#successMessage").show(); // Show success message
+                window.location.href = BASE_URL;
+
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText); // Log the error response to the console

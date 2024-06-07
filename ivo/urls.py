@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from auth_user.views import Login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', Login.as_view(), name='login'),
     path('api/auth/', include('auth_user.urls'), name='auth'),
     path('api/office/', include('office.urls'), name='office'),
-    path('', include('dashboard.urls'), name='dashboard')
+    path('dashboard/', include('dashboard.urls'), name='dashboard')
 ]
 
 # Static and media URL configurations

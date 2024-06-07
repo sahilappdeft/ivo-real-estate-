@@ -12,7 +12,7 @@ def commonEmailInitialize(subject, recipients, text_content=''):
     msg = EmailMultiAlternatives(
         subject=f'Aikona : {subject}',
         body=text_content,
-        from_email="sahil@yopmail.com",
+        from_email="nv.test.dev@gmail.com",
         to=recipients
     )
     return msg
@@ -50,20 +50,14 @@ def send_verify_email(subject, recipients, otp, user_name="N/A"):
         return False
 
 
-def send_forgot_password_email(subject, recipients, password_reset_link, user_name="N/A"):
+def send_forgot_password_email(subject, recipients, otp, user_name="N/A"):
     try:
-        # Render the HTML content of the email template
-        html_content = render_to_string('forgot_password_email.html', {
-            'password_reset_link': password_reset_link, 'user_name': user_name
-        })
-        # Strip the HTML tags to generate the plain text email body
+        html_content = render_to_string('email-templates/FORGOT.html', {
+                                        'otp': otp, 'user_name': user_name})
         text_content = strip_tags(html_content)
 
         msg = commonEmailInitialize(subject, recipients, text_content)
-
-        # Attach the HTML content to the email
         msg.attach_alternative(html_content, "text/html")
-        # Send the email
         msg.send()
 
         print('Email sent')
@@ -75,7 +69,7 @@ def send_forgot_password_email(subject, recipients, password_reset_link, user_na
 
 def send_invite_employee_email(subject, recipient_email, token):
     try:
-        html_content = render_to_string('email-templates/email-verification.html', {'link': token})
+        html_content = render_to_string('email-templates/invite.html', {'link': token})
         text_content = strip_tags(html_content)
 
         msg = commonEmailInitialize(subject, [recipient_email], text_content)

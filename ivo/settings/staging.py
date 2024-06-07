@@ -35,7 +35,8 @@ else:
 # EMAIL_USE_TLS = False
 # EMAIL_USE_SSL = False
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '4aff3390a350e8'
-EMAIL_HOST_PASSWORD = '8afd504e0e53c2'
-EMAIL_PORT = '2525'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=465
+EMAIL_HOST_USER='a49722542@gmail.com'
+EMAIL_HOST_PASSWORD='vmduiybtjqbirvcv'
+EMAIL_USE_SSL=True

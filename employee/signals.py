@@ -15,5 +15,5 @@ def Update_invite_employe_object(sender, instance, created, **kwargs):
         #send invitation mail to employee
         subject = "Invite Employee"
         # generate_link = 
-        send_invite_employee_email(subject, [instance.recipient_email], "generatelink")
+        send_invite_employee_email(subject, [instance.recipient_email], token)
         

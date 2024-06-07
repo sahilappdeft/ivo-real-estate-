@@ -49,7 +49,7 @@ $(document).ready(function() {
         if(isValid){
             $.ajax({
                 type: 'POST',
-                url: BASE_URL + 'api/auth/login/',
+                url: BASE_URL,
                 data: JSON.stringify(formData),
                 contentType: 'application/json',
                 dataType: 'json',

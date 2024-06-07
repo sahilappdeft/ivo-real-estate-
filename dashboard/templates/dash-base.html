@@ -89,10 +89,11 @@
     
         // Get the login nav item
         var loginNavItem = document.getElementById('loginNavItem');
-    
+        
+        console.log(accessToken, "access_token")
         // If access token is present, hide the login nav item
         if (accessToken) {
-            loginNavItem.   .display = 'none';
+            loginNavItem.style.display = 'none';
         } else {
             loginNavItem.style.display = ''; // Show the login nav item
         }
