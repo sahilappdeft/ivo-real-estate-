@@ -1,6 +1,9 @@
 
 $(document).ready(function () {
-    
+    console.log("aya yaa aya ya ")
+    alert(
+        "das----------------------"
+    );
     // call company role api 
     companyRole()
     var counter_email = 0

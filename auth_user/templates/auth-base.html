@@ -13,6 +13,7 @@
     <!-- loader-->
     <link href="{% static 'css/pace.min.css' %}" rel="stylesheet" />
     <script src="{% static 'js/pace.min.js' %}"></script>
+    <script src="{% static 'js/common/env-variables.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -69,7 +70,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Blog</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" id="loginNavItem">
                         <a class="nav-link" href="{% url 'login' %}" class=""><button
                                 class="btn login-btn text-white">Login</button></a>
                     </li>
@@ -81,5 +82,23 @@
     <!-- navbar-end -->
 
     {% block content %}{% endblock %}
+
+   <!-- Script to conditionally hide the login button -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check if access token is present in local storage
+        var accessToken = localStorage.getItem('access_token');
+
+        // Get the login nav item
+        var loginNavItem = document.getElementById('loginNavItem');
+
+        // If access token is present, hide the login nav item
+        if (accessToken) {
+            loginNavItem.style.display = 'none';
+        } else {
+            loginNavItem.style.display = ''; // Show the login nav item
+        }
+    });
+</script>
 
 </body>

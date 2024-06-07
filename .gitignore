@@ -5,5 +5,4 @@ media/
 **/__pycache__/
 db.*
 db.sqlite3/
-.env
 staticfiles/

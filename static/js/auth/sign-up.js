@@ -24,8 +24,9 @@ $(document).ready(function() {
     // Email input event listener
     $("#inputEmail").on("input", function() {
       const email = $(this).val();
+      console.log(email)
       if (!validateEmail(email)) {
-          $("#emailError").text("Please enter a valid email address.");
+          $("#emailError").text("Please enter a valid email address.").css("visibility", "visible");
       } else {
           $("#emailError").text("");
       }
@@ -45,7 +46,7 @@ $(document).ready(function() {
     $("#inputPassword").on("input", function() {
       const password = $(this).val();
       if (!validatePassword(password)) {
-          $("#passwordError").text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.");
+          $("#passwordError").text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.").css("visibility", "visible");
       } else {
           $("#passwordError").text("");
       }
@@ -56,7 +57,7 @@ $(document).ready(function() {
       const confirmPassword = $(this).val();
       const password = $("#inputPassword").val();
       if (password !== confirmPassword) {
-          $("#confirmPasswordError").text("Passwords do not match.");
+          $("#confirmPasswordError").text("Passwords do not match.").css("visibility", "visible");
       } else {
           $("#confirmPasswordError").text("");
       }
@@ -80,7 +81,7 @@ $(document).ready(function() {
   
         // Check email
         if (!email || !validateEmail(email)) {
-            $("#emailError").text("Please enter a valid email address.");
+            $("#emailError").text("Please enter a valid email address.").css("visibility", "visible");
             isValid = false;
         } else {
             $("#emailError").text("");
@@ -88,7 +89,7 @@ $(document).ready(function() {
   
         // Check first name
         if (!firstName) {
-            $("#firstNameError").text("First name is required.");
+            $("#firstNameError").text("First name is required.").css("visibility", "visible");
             isValid = false;
         } else {
             $("#firstNameError").text("");
@@ -96,7 +97,7 @@ $(document).ready(function() {
   
         // Check last name
         if (!lastName) {
-            $("#lastNameError").text("Last name is required.");
+            $("#lastNameError").text("Last name is required.").css("visibility", "visible");
             isValid = false;
         } else {
             $("#lastNameError").text("");
@@ -104,10 +105,10 @@ $(document).ready(function() {
   
         // Check password
         if (!password) {
-            $("#passwordError").text("Password is required.");
+            $("#passwordError").text("Password is required.").css("visibility", "visible");
             isValid = false;
         } else if (!passwordRegex.test(password)) {
-            $("#passwordError").text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.");
+            $("#passwordError").text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.").css("visibility", "visible");
             isValid = false;
         } else {
             $("#passwordError").text("");
@@ -115,10 +116,10 @@ $(document).ready(function() {
   
         // Check confirm password
         if (!confirmPassword) {
-            $("#confirmPasswordError").text("Please confirm your password.");
+            $("#confirmPasswordError").text("Please confirm your password.").css("visibility", "visible");
             isValid = false;
         } else if (password !== confirmPassword) {
-            $("#confirmPasswordError").text("Passwords do not match.");
+            $("#confirmPasswordError").text("Passwords do not match.").css("visibility", "visible");
             isValid = false;
         } else {
             $("#confirmPasswordError").text("");
@@ -126,7 +127,7 @@ $(document).ready(function() {
   
         // Check terms and conditions
         if (!termsCheck) {
-            $("#termsError").text("Please accept the terms and conditions.");
+            $("#termsError").text("Please accept the terms and conditions.").css("visibility", "visible");
             isValid = false;
         } else {
             $("#termsError").text("");

@@ -253,7 +253,7 @@
                         <button type="button" class="btn btn-outline-primary prev-btn px-5 fs-6 py-2"
                             data-prev="step-2">Back</button>
                         <button type="button" class="btn btn-outline-primary px-5 fs-6 py-2" data-bs-toggle="modal"
-                            data-bs-target="#previewmodal">Preview</button>
+                            onclick='openPreviewModal()'>Preview</button>
                         <button type="button" class="btn fs-6 fw-normal py-2 bg-main text-white px-5 "
                             data-bs-toggle="modal" onclick="PostOfficeForm()">Save</button>
                     </div>
@@ -323,7 +323,7 @@
                             <small class="preview-heading fw-semibold">Office Name</small>
                         </div>
                         <div class="col-md-6">
-                            <small class="preview-data">Sozial- und Jugenddienste</small>
+                            <small class="preview-data office-name">Sozial- und Jugenddienste</small>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -331,7 +331,7 @@
                             <small class="preview-heading fw-semibold">Office Nick Name</small>
                         </div>
                         <div class="col-md-6">
-                            <small class="preview-data">Landsberger Allee</small>
+                            <small class="preview-data office-nickname">Landsberger Allee</small>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -339,7 +339,7 @@
                             <small class="preview-heading fw-semibold">Office Purpose</small>
                         </div>
                         <div class="col-md-6">
-                            <small class="preview-data">Landsberger Allee</small>
+                            <small class="preview-data office-purpose">Landsberger Allee</small>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -347,7 +347,7 @@
                             <small class="preview-heading fw-semibold">Street</small>
                         </div>
                         <div class="col-md-6">
-                            <small class="preview-data">Landsberger Allee</small>
+                            <small class="preview-data street">Landsberger Allee</small>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -355,7 +355,7 @@
                             <small class="preview-heading fw-semibold">Street no.</small>
                         </div>
                         <div class="col-md-6">
-                            <small class="preview-data">214a</small>
+                            <small class="preview-data street-no">214a</small>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -363,15 +363,15 @@
                             <small class="preview-heading fw-semibold">ZIP-code</small>
                         </div>
                         <div class="col-md-6">
-                            <small class="preview-data">10115</small>
+                            <small class="preview-data zipcode">10115</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer gap-1 border-0 justify-content-center pb-4">
-                    <button type="button" class="btn m-0 fs-6 p-2 px-5 btn-outline-primary text-main">Back</button>
-                    <button type="button" class="btn bg-main m-0 fs-6 p-2 text-white px-5">Send</button>
+                    <button type="button" class="btn m-0 fs-6 p-2 px-5 btn-outline-primary text-main" data-bs-dismiss="modal">Back</button>
+                    <button type="button" class="btn bg-main m-0 fs-6 p-2 text-white px-5" onclick="PostOfficeForm()">save</button>
                 </div>
 
             </div>

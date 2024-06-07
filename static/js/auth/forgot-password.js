@@ -5,7 +5,7 @@ $(document).ready(function () {
         var passwordError = $('#passwordError');
 
         if (!validatePassword(password)) {
-            passwordError.text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.");
+            passwordError.text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.").css("visibility", "visible");
         } else {
             passwordError.text(""); // Clear error message
         }
@@ -18,7 +18,7 @@ $(document).ready(function () {
         var confirmPasswordError = $('#confirmPasswordError');
 
         if (confirmPassword !== password) {
-            confirmPasswordError.text("Passwords do not match.");
+            confirmPasswordError.text("Passwords do not match.").css("visibility", "visible");
         } else {
             confirmPasswordError.text(""); // Clear error message
         }

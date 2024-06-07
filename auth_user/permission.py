@@ -58,6 +58,7 @@ class IsTokenValid(BasePermission):
 import ast
 from jose import jwt
 from django.conf import settings
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from rest_framework.exceptions import AuthenticationFailed
 from .models import CustomUser
@@ -68,12 +69,12 @@ def token_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
         auth_header = request.META.get('HTTP_AUTHORIZATION', '')
         if not auth_header.startswith('Bearer '):
-            return JsonResponse({'detail': 'Token credentials not provided'}, status=401)
+            return redirect('login')
         
         token = auth_header.split(' ')[1]  # Extract token value from Bearer token
 
         if not token:
-            return JsonResponse({'detail': 'Token credentials not provided'}, status=401)
+            return redirect('login')
         
         try:
             # Decode the JWT token and extract the payload
@@ -83,21 +84,21 @@ def token_required(view_func):
 
             # Check if user ID exists
             if user_id is None:
-                return JsonResponse({'detail': 'Invalid token'}, status=401)
+                return redirect('login')
 
             # Check if user with the given ID exists
             user = CustomUser.objects.filter(user_id=user_id).first()
 
             if user is None:
-                return JsonResponse({'detail': 'Invalid token'}, status=401)
+                return redirect('login')
 
             # Add user object to the request
             request.user = user
             return view_func(request, *args, **kwargs)
         
         except jwt.ExpiredSignatureError:
-            return JsonResponse({'detail': 'Token expired'}, status=401)
+            return redirect('login')
         except jwt.JWTError:
-            return JsonResponse({'detail': 'Unauthorized'}, status=401)
+            return redirect('login')
 
     return _wrapped_view_func

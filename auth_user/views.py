@@ -129,16 +129,8 @@ class Login(APIView):
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
-            # get user from database and add in request.user
-            print(response_data, "response_data response_dataresponse_data")
-            user_id = response_data['user']['id']
-            user = CustomUser.objects.filter(user_id=user_id).first()
-            if user:
-                request.user = user
-                # Registration Successful
-                return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
-            else:
-                return Response({"message": "not found"}, status=status.HTTP_404_NOT_FOUND)
+            # Registration Successful
+            return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')

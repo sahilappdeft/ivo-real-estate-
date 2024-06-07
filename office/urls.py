@@ -5,7 +5,7 @@ from .views import*
 app_name = 'office'
 
 urlpatterns = [
-    path('offices/', OfficeApiView.as_view(), name='office-list'),
+    path('offices/', OfficeApiView.as_view(), name='offices'),
     path('roles/', CompanyRoleApiView.as_view(), name='office-list'),
 
 ]

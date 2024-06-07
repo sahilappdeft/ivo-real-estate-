@@ -1,6 +1,6 @@
 var formData = {
-    "office-name": "",
-    "office-purpose":""
+    "name": "",
+    "purpose":""
 }
 var invite_employees = {}
 var employee = {}
@@ -105,6 +105,7 @@ function companyRole(){
 
     // Retrieve token from local storage
     var accessToken = localStorage.getItem('access_token');
+    console.log(accessToken, "accessToken accessTokenaccessToken")
     $.ajax({
         type: 'GET',
         url: 'http://127.0.0.1:8000/api/office/roles/',
@@ -138,4 +139,21 @@ function updateProfileRoles(roles) {
     roles.forEach((role, index) => {
         profileRoles[index].setAttribute('name', role.id);
     });
+}
+
+
+// Function to update preview modal content
+function updateModalContent(data) {
+    document.querySelector('.preview-data.office-name').textContent = data.name || '';
+    document.querySelector('.preview-data.office-nickname').textContent = data.office_nickname || '';
+    document.querySelector('.preview-data.office-purpose').textContent = data.purpose || '';
+    document.querySelector('.preview-data.street').textContent = data.street || '';
+    document.querySelector('.preview-data.street-no').textContent = data.address || '';
+    document.querySelector('.preview-data.zipcode').textContent = data.zipcode || '';
+}
+
+// Example function to open the modal and update content
+function openPreviewModal() {
+    updateModalContent(formData);
+    $('#previewmodal').modal('show');
 }

@@ -8,13 +8,15 @@ from rest_framework.views import APIView
 
 from auth_user.permission import IsTokenValid, token_required
 from .models import Office, CompanyRole
-from .serializers import OfficeSerializer, OfficeAndBankAccountsSerializer, CompanyRoleSerializer
+from .serializers import (OfficeSerializer, OfficeAndBankAccountsSerializer,
+                          CompanyRoleSerializer, CompanyRolePermissionSerializer
+                        )
 
 
 class OfficeApiView(APIView):
     queryset = Office.objects.all()
     serializer_class = OfficeSerializer
-    # permission_classes = (IsTokenValid,)
+    
     def get(self, request):
         # Render the HTML template for verify user
         return render(request, 'office-register.html')
@@ -44,7 +46,7 @@ class CompanyRoleApiView(APIView):
         elif user.role == "employee":
             company = user.office.company
             
-        # Get all CompanyRole objects
+        # Get all CompanyRole objects   
         company_roles = CompanyRole.objects.filter(Company=company)
         
         # Serialize the data
@@ -52,3 +54,16 @@ class CompanyRoleApiView(APIView):
         
         # Return serialized data with status 200
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        
+        data = request.data
+        serializer = CompanyRolePermissionSerializer(data=data)
+        
+        if serializer.is_valid():
+            
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
+    

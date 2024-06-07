@@ -68,14 +68,14 @@ class BankAccounts(models.Model):
     
 
 class RolePermissiom(models.Model):
-    office = models.ForeignKey("Office", on_delete=models.CASCADE, 
-                               related_name='office_role_permissions')
+    company = models.ForeignKey("Company", on_delete=models.CASCADE, 
+                               related_name='company_role_permissions', null=True, blank=True)
     role = models.ForeignKey('CompanyRole', on_delete=models.CASCADE, 
                              related_name='role_permission')
     permission = models.ManyToManyField(Permission)
     
     class Meta:
-        unique_together = ('office', 'role')
+        unique_together = ('company', 'role')
         
 
 class CompanyRole(models.Model):

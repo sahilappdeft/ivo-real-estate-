@@ -13,12 +13,12 @@ $(document).ready(function() {
         let isValid = true;
         // Check if email is empty
         if (!email) {
-            $("#emailError").text("Email is required.");
+            $("#emailError").text("Email is required.").css("visibility", "visible");
             event.preventDefault();
             isValid = false
             }
         else if (!emailRegex.test(email)) { // Check if email is valid
-            $("#emailError").text("Please enter a valid email address.");
+            $("#emailError").text("Please enter a valid email address.").css("visibility", "visible");
             event.preventDefault();
             isValid = false
             }
