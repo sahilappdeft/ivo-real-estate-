@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('auth_user.urls'), name='auth'),
     path('api/office/', include('office.urls'), name='office'),
-    path('dashboard/', include('dashboard.urls'), name='dashboard')
+    path('', include('dashboard.urls'), name='dashboard')
 ]
 
 # Static and media URL configurations
