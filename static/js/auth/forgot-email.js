@@ -48,11 +48,11 @@ $(document).ready(function() {
         // Send AJAX request to the API endpoint
         $.ajax({
             type: 'POST',
-            url: 'http://127.0.0.1:8000/api/auth/send-otp/forgot/',
+            url: BASE_URL + 'api/auth/send-otp/forgot/',
             data: postData, // Send email data as JSON
             dataType: 'json', // Specify JSON as the expected response type
             success: function(response) {
-                window.location.href = 'http://127.0.0.1:8000/api/auth/forgot-otp/?email=' + encodeEmail(email);
+                window.location.href = BASE_URL + 'api/auth/forgot-otp/?email=' + encodeEmail(email);
             },
             error: function(response) {
                 var error = JSON.parse(response.responseText); // Parse the JSON error response

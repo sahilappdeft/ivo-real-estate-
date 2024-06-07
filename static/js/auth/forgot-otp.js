@@ -33,7 +33,7 @@ $(document).ready(function () {
         }
 
         // Redirect to verification page with user email as query parameter
-        window.location.href = 'http://127.0.0.1:8000/api/auth/forgot-password/?email=' + email+'&otp='+otp;
+        window.location.href = BASE_URL + 'api/auth/forgot-password/?email=' + email+'&otp='+otp;
 
     });
 
@@ -52,7 +52,7 @@ $(document).ready(function () {
         // Send AJAX request to the API endpoint
         $.ajax({
           type: 'POST',
-          url: 'http://127.0.0.1:8000/api/auth/send-otp/forgot/',
+          url: BASE_URL + 'api/auth/send-otp/forgot/',
           data: postData, // Send email data as JSON
           dataType: 'json', // Specify JSON as the expected response type
           success: function(response) {

@@ -34,7 +34,7 @@ $(document).ready(function () {
         var otp = getOtp();
         // AJAX request
         $.ajax({
-            url: 'http://127.0.0.1:8000/api/auth/verify-email/',
+            url: BASE_URL + 'api/auth/verify-email/',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -72,7 +72,7 @@ $(document).ready(function () {
         // Send AJAX request to the API endpoint
         $.ajax({
           type: 'POST',
-          url: 'http://127.0.0.1:8000/api/auth/send-otp/verify/',
+          url: BASE_URL + 'api/auth/send-otp/verify/',
           data: postData, // Send email data as JSON
           dataType: 'json', // Specify JSON as the expected response type
           success: function(response) {

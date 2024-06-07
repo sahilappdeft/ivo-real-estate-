@@ -159,7 +159,7 @@ $(document).ready(function() {
   
         $.ajax({
             type: 'POST',
-            url: 'http://127.0.0.1:8000/api/auth/signup/',
+            url: BASE_URL + 'api/auth/signup/',
             data: JSON.stringify(formData),
             contentType: 'application/json',
             dataType: 'json',
@@ -171,7 +171,7 @@ $(document).ready(function() {
                 var userEmail = formData.email;
   
                 // Redirect to verification page with user email as query parameter
-                window.location.href = 'http://127.0.0.1:8000/api/auth/verify-email/?email=' + encodeEmail(userEmail);
+                window.location.href = BASE_URL + 'api/auth/verify-email/?email=' + encodeEmail(userEmail);
             },
             error: function(xhr, status, error) {
                 // Handle error response

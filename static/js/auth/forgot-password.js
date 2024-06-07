@@ -57,7 +57,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'POST',
-            url: 'http://127.0.0.1:8000/api/auth/forgot-password/',
+            url: BASE_URL + 'api/auth/forgot-password/',
             data: JSON.stringify(formData),
             contentType: 'application/json',
             dataType: 'json',
@@ -66,7 +66,7 @@ $(document).ready(function () {
                 console.log(response);
 
                 // Redirect to success page
-                window.location.href = 'http://127.0.0.1:8000/api/auth/forgot-password-sucess/';
+                window.location.href = BASE_URL + 'api/auth/forgot-password-sucess/';
             },
             error: function(response) {
                 var error = JSON.parse(response.responseText); // Parse the JSON error response

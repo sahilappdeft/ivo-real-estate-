@@ -81,7 +81,7 @@ function PostOfficeForm(){
     console.log(accessToken, "accessToken")
     $.ajax({
         type: 'POST',
-        url: 'http://127.0.0.1:8000/api/office/offices/',
+        url: BASE_URL + 'api/office/offices/',
         data: JSON.stringify(data),
         contentType: 'application/json',
         dataType: 'json',
@@ -108,7 +108,7 @@ function companyRole(){
     console.log(accessToken, "accessToken accessTokenaccessToken")
     $.ajax({
         type: 'GET',
-        url: 'http://127.0.0.1:8000/api/office/roles/',
+        url: BASE_URL + 'api/office/roles/',
         beforeSend: function(xhr) {
             // Include token in the request header
             xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
