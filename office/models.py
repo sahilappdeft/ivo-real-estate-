@@ -74,8 +74,8 @@ class RolePermissiom(models.Model):
                              related_name='role_permission')
     permission = models.ManyToManyField(Permission)
     
-    class Meta:
-        unique_together = ('company', 'role')
+    # class Meta:
+    #     unique_together = ('company', 'role')
         
 
 class CompanyRole(models.Model):
