@@ -1691,3 +1691,31 @@ ul.categories-list li {
     left: 0;
     margin-top: 5px;
 }
+
+#toast-container > div {
+    opacity: 1 !important;
+}
+.toast {
+    background-color: #333 !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+.toast-success {
+    background-color: #51A351 !important; /* Green for success */
+}
+.toast-error {
+    background-color: #BD362F !important; /* Red for error */
+}
+.toast-info {
+    background-color: #2F96B4 !important; /* Blue for info */
+}
+.toast-warning {
+    background-color: #F89406 !important; /* Orange for warning */
+}
+.toast-progress {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.toast-message {
+    font-size: 16px !important;
+}

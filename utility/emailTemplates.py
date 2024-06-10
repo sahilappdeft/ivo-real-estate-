@@ -67,9 +67,9 @@ def send_forgot_password_email(subject, recipients, otp, user_name="N/A"):
         return False
     
 
-def send_invite_employee_email(subject, recipient_email, token):
+def send_invite_employee_email(subject, recipient_email, link):
     try:
-        html_content = render_to_string('email-templates/invite.html', {'link': token})
+        html_content = render_to_string('email-templates/invite.html', {'link': link})
         text_content = strip_tags(html_content)
 
         msg = commonEmailInitialize(subject, [recipient_email], text_content)

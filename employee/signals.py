@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import InviteEmployee
-from .utilis import generate_token
+from .utilis import generate_token, generate_token_link
 from utility.emailTemplates import send_invite_employee_email
 
 
@@ -15,5 +15,5 @@ def Update_invite_employe_object(sender, instance, created, **kwargs):
         #send invitation mail to employee
         subject = "Invite Employee"
         # generate_link = 
-        send_invite_employee_email(subject, [instance.recipient_email], token)
+        send_invite_employee_email(subject, instance.recipient_email, generate_token_link(token))
         

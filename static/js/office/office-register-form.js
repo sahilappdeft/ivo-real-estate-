@@ -62,6 +62,8 @@ function cancelInviteEmployee(id){
 
 function removeBankAccount(id){
     index = getAfterHyphen(id)
+    console.log(id)
+    console.log(accounts, "accounts", index)
     delete accounts[index]
 }
 

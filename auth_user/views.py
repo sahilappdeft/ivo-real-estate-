@@ -49,9 +49,11 @@ class RegisterUser(APIView):
         if response.status_code == 200:
             response_data = response.json()
             user_id = response_data.get('id')
+            email = response_data.get('email')
+            print(response_data, "::::::::::::::::", email)
 
             #create user wih response User-ID.
-            user = CustomUser.objects.create(user_id=user_id)
+            user = CustomUser.objects.create(user_id=user_id, email=email)
 
             # Send OTP to user for email verification
             send_verify_email('Confirm your email', [response_data.get('email')],
@@ -262,13 +264,19 @@ class ForgotPawwordSucess(APIView):
         return render(request, 'forgot-sucess.html')
     
 
-from employee.models import InviteEmployee, EmployeeOffice
+from employee.models import InviteEmployee, Employee
 class SetupAccount(APIView):
+    
+    def get(self, request):
+        # Render the HTML template for setup-account user
+        return render(request, 'setup-account.html')
+    
     def post(self, request, *args, **kwargs):
         
-        data = request.data
+        data = request.data.copy()
         # get invite employee objet
-        invite_token = self.kwargs.get('token')
+        invite_token = request.query_params.get('token')
+        print(invite_token, "invite_token invite_token")
         invite_employe = InviteEmployee.objects.filter(token=invite_token).first()
         
         if invite_employe:
@@ -279,20 +287,21 @@ class SetupAccount(APIView):
             #hit request to auth microservice
             response = call_auth_microservice('/signup', data)
 
+            print(data, "datadatadata")
             # Check if the response is successful
             if response.status_code == 200:
                 response_data = response.json()
                 user_id = response_data.get('id')
+                email = response_data.get('email')
                 #create user wih response User-ID.
-                user = CustomUser.objects.create(user_id=user_id, role="employee")
+                user = CustomUser.objects.create(user_id=user_id, role="employee", email=email)
                 
                 # get employee obj
-                employee = user.employee
-                # create employe office object
-                EmployeeOffice.objects.create(employee=employee,
-                                            office=invite_employe.sender,
-                                            role=invite_employe.role
-                                            )
+                employee = Employee.objects.get(user=user)
+                employee.role = invite_employe.role
+                office = invite_employe.sender
+                employee.save()
+                
                 # set-up sucessfully
                 return Response({"message": "Account Set-up Successfully"}, status=status.HTTP_200_OK)
             else:

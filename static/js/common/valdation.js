@@ -1,7 +1,6 @@
 function formValidation(key, value, id) {
     var errorMessage = $("#" + id).next(".error-message");
-    isValid = true
-
+    let isValid = true
     switch (key) {
         case "name":
         case "address":
@@ -16,6 +15,9 @@ function formValidation(key, value, id) {
         case "owner_name":
         case "iban":
         case "bic":
+        case "first_name":
+        case "last_name":
+            // console.log(typeof value, ":::::::::::andr")
             if (value === "") {
                 errorMessage.text("Field is required").css("visibility", "visible");
                 isValid = false
@@ -46,7 +48,30 @@ function formValidation(key, value, id) {
                 errorMessage.text("");
             }
             break;
-        // Add more cases for other fields as required
+        case "password":
+            if(!validatePassword(value)){
+                 errorMessage.text("Password must be at least 8 characters long and contain at least one uppercase letter, one special character, and one digit.").css("visibility", "visible");
+                 isValid = false
+            }else if(value === ""){
+            errorMessage.text("Field is required").css("visibility", "visible");
+            isValid = false 
+            }else{
+                errorMessage.text("");
+            }
+           break;
+        case "confirm_password":
+            var password = $("#password").val();
+            console.log(password, value, ":::::::;")
+            if(value != password){
+                errorMessage.text("Passwords do not match.").css("visibility", "visible");;
+                isValid = false
+            }else if(value === ""){
+                errorMessage.text("Field is required").css("visibility", "visible");
+                isValid = false 
+            }
+            else{
+                errorMessage.text("")
+            }
         default:
             break;
     }

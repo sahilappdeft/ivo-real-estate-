@@ -15,17 +15,10 @@ class BulkCreateManager(models.Manager):
 class Employee(models.Model):
     user = models.ForeignKey('auth_user.Customuser', on_delete=models.CASCADE, 
                             null=False, blank=False, related_name="employee")
-
-
-class EmployeeOffice(models.Model):
-    employee = models.ForeignKey('Employee', on_delete=models.CASCADE)
-    office = models.ForeignKey('office.Office', on_delete=models.CASCADE)
     role = models.ForeignKey('office.CompanyRole', on_delete=models.CASCADE,
-                              related_name='employee_role')
-
-    # class Meta:
-    #     unique_together = ('employee', 'office', 'role')
-
+                              related_name='employee_role', null=True, blank=True)
+    office = models.ManyToManyField('office.Office', related_name='employee_offices',
+                                    null=True, blank=True)
 
 class InviteEmployee(models.Model):
     STATUS_CHOICES = [

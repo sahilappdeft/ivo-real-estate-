@@ -174,8 +174,19 @@ $(document).ready(function() {
                 window.location.href = BASE_URL + 'api/auth/verify-email/?email=' + encodeEmail(userEmail);
             },
             error: function(xhr, status, error) {
-                // Handle error response
-                console.error(xhr.responseText);
+                // Handle error
+                var errorMessage = "An error occurred"; // Default error message
+                if (xhr.responseText) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        console.log(response.error, "response")
+                        errorMessage = response.error || errorMessage;
+                    } catch (e) {
+                        console.error("Error parsing JSON response:", e);
+                    }
+                }
+                toastr.error(errorMessage); // Display error toaster
+            
             }
         });
     });

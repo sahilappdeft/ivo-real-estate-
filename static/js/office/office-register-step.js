@@ -63,8 +63,7 @@ $(document).ready(function () {
                         <td>
                             <div class="d-flex gap-3">
                                 <i class='bx bxs-check-circle save-btn fs-4 text-gray-color' id='submitBank-${counter}'>
-                                 </i><i class='bx bxs-plus-circle rotate-90 fs-4 text-gray-color' id='cancelBank-${counter}
-                                 oncclick='removeBankAccount(this.id)' ></i>
+                                 </i><i class='bx bxs-plus-circle cancel-btn rotate-90 fs-4 text-gray-color' id='cancelBank-${counter}'></i>
                             </div>
                         </td>
                     </tr>`;
@@ -146,6 +145,12 @@ $(document).ready(function () {
             '</tr>';
 
         row.replaceWith(originalRow);
+    });
+
+    $(document).on('click', '.cancel-btn', function () {
+        var id = $(this).attr('id');
+        $(this).parent().parent().parent().remove();
+        removeBankAccount(id)
     });
 
     // select role
