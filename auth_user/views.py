@@ -299,7 +299,7 @@ class SetupAccount(APIView):
                 # get employee obj
                 employee = Employee.objects.get(user=user)
                 employee.role = invite_employe.role
-                office = invite_employe.sender
+                employee.office.add(invite_employe.sender)
                 employee.save()
                 
                 # set-up sucessfully
