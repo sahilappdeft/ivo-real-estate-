@@ -6,4 +6,4 @@ media/
 db.*
 db.sqlite3/
 staticfiles/
-**/env-variables
+**/js/common/env-variables

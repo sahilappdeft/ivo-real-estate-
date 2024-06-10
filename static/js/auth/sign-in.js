@@ -68,11 +68,20 @@ $(document).ready(function() {
                     console.error('Access token not found in the response');
                 }
                 },
-                error: function(response) {
-                var error = JSON.parse(response.responseText); // Parse the JSON error response
-                $("#errorMessage").text(error.error).fadeIn().delay(3000).fadeOut(); // Show error message
-                $("#successMessage").hide(); // Hide success message if it's currently displayed
-                $("#errorMessage").show(); 
+                error: function(xhr, status, error) {
+                    // Handle error
+                    var errorMessage = "An error occurred"; // Default error message
+                    if (xhr.responseText) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            console.log(response.error, "response")
+                            errorMessage = response.error || errorMessage;
+                        } catch (e) {
+                            console.error("Error parsing JSON response:", e);
+                        }
+                    }
+                    toastr.error(errorMessage); // Display error toaster
+                
                 }
             });
         }
