@@ -1,6 +1,5 @@
 function SetupAccount(){
     // Perform form validation
-    console.log("OOOOOOOOOOOOOOOOOOOO")
     var isValid = true;
     $(".form-control").each(function() {
         var id = $(this).attr('id'); 

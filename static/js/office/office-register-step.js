@@ -1,7 +1,23 @@
 
 $(document).ready(function () {
-    console.log("aya yaa aya ya ")
-
+  // Toastr options
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "3000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+};
     // call company role api 
     companyRole()
     var counter_email = 0
@@ -141,11 +157,45 @@ $(document).ready(function () {
             '<td>' + ownername + '</td>' +
             '<td>' + iban + '</td>' +
             '<td>' + bic + '</td>' +
-            '<td><button class="btn btn-primary edit-btn">Edit</button> </td>' +
+            '<td><button class="btn bg-transparent text-dark edit-btn"><i class="bx bx-edit-alt"></i></button> </td>' +
             '</tr>';
 
         row.replaceWith(originalRow);
     });
+
+
+    $(document).on('click', '.edit-btn', function () {
+        var row = $(this).closest('tr');
+        var purpose = row.find('td').eq(0).text();
+        var ownername = row.find('td').eq(1).text();
+        var iban = row.find('td').eq(2).text();
+        var bic = row.find('td').eq(3).text();
+        var counter = row.index();  // Assuming each row has a unique index
+    
+        var editRow = `<tr>
+                            <td><input type="text" id="purpose-${counter}" class="form-control" name="purpose" value="${purpose}"
+                             oninput="stateAccount(this.id, this.value, this.name)">
+                             <span class='error-message text-danger'></span></td>
+                            <td><input type="text" id="owner_name-${counter}" class="form-control" name="owner_name" value="${ownername}"
+                            oninput="stateAccount(this.id, this.value, this.name)">
+                            <span class='error-message text-danger'></span></td>
+                            <td><input type="text" id="iban-${counter}" class="form-control" name="iban" value="${iban}"
+                            oninput="stateAccount(this.id, this.value, this.name)">
+                            <span class='error-message text-danger'></span></td>
+                            <td><input type="text" id="bic-${counter}" class="form-control" name="bic" value="${bic}"
+                            oninput="stateAccount(this.id, this.value, this.name)">
+                            <span class='error-message text-danger'></span></td>
+                            <td>
+                                <div class="d-flex gap-3">
+                                    <i class='bx bxs-check-circle save-btn fs-4 text-gray-color' id='submitBank-${counter}'></i>
+                                    <i class='bx bxs-plus-circle cancel-btn rotate-90 fs-4 text-gray-color' id='cancelBank-${counter}'></i>
+                                </div>
+                            </td>
+                        </tr>`;
+    
+        row.replaceWith(editRow);
+    });
+
 
     $(document).on('click', '.cancel-btn', function () {
         var id = $(this).attr('id');

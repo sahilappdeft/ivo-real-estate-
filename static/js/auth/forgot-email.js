@@ -27,12 +27,9 @@ $(document).ready(function() {
     }    
 
     $("#submitBtn").click(function(event) {
-        console.log("PPPPPPPPPPPPPPPPPPPPPPP")
         // Clear previous error messages
         $(".error-message").text("");
         const email = $("#inputEmail").val();
-
-        console.log(email, ":::::::::::::::::::::::::::::::::::::::::::")
 
         // Validate form
         if (!validateForm(email)) {

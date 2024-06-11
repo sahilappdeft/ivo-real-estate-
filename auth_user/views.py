@@ -50,10 +50,14 @@ class RegisterUser(APIView):
             response_data = response.json()
             user_id = response_data.get('id')
             email = response_data.get('email')
+            first_name = response_data.get('first_name')
+            last_name = response_data.get('last_name')
+
             print(response_data, "::::::::::::::::", email)
 
             #create user wih response User-ID.
-            user = CustomUser.objects.create(user_id=user_id, email=email)
+            user = CustomUser.objects.create(user_id=user_id, email=email,
+                                             first_name=first_name, last_name=last_name,)
 
             # Send OTP to user for email verification
             send_verify_email('Confirm your email', [response_data.get('email')],

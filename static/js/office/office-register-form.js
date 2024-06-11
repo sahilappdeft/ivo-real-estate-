@@ -93,11 +93,10 @@ function PostOfficeForm(){
         },
         success: function(response) {
             console.log('POST request successful:', response);
-            // Handle success response
+            toastr.success("Office created sucessfully"); // Display error toaster
         },
         error: function(xhr, status, error) {
-            console.error('Error sending POST request:', error);
-            // Handle error response
+            toaste
         }
     });
 }
@@ -119,6 +118,7 @@ function companyRole(){
             console.log('GET request successful:', response);
             // Handle success response
             updateProfileRoles(response);
+
         },
         error: function(xhr, status, error) {
             console.error('Error sending GET request:', error);
@@ -137,11 +137,23 @@ function updateProfileRoles(roles) {
         return;
     }
 
-    // Loop through each profile-role element and update the name attribute
+    // Loop through each profile-role element and update the name attribute and add a label
     roles.forEach((role, index) => {
         profileRoles[index].setAttribute('name', role.id);
+        
+        // Check if a label already exists, if not, create one
+       // var label = profileRoles[index].querySelector('.role-label');
+        // if (!label) {
+        //     label = document.createElement('label');
+        //     label.className = 'role-label';
+        //     profileRoles[index].appendChild(label);
+        // }
+        
+        // Update the label text
+        //label.textContent = role.name;
     });
 }
+
 
 
 // Function to update preview modal content
