@@ -1,7 +1,8 @@
 from django.db import transaction
+from django.contrib.auth.models import Permission
 
 from rest_framework import serializers
-from .models import Office, BankAccounts, Company, CompanyRole, RolePermissiom
+from .models import Office, BankAccounts, Company, CompanyRole
 from employee.serializers import InviteEmployeeSerializer
 from employee.models import InviteEmployee
 
@@ -65,11 +66,6 @@ class OfficeAndBankAccountsSerializer(serializers.Serializer):
             'invite_employee': InviteEmployeeSerializer(invite_employee_instances, many=True).data
         }
 
-class RolePermissiomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RolePermissiom
-        fields = '__all__'
-
 
 class CompanyRoleSerializer(serializers.ModelSerializer):
     
@@ -77,14 +73,9 @@ class CompanyRoleSerializer(serializers.ModelSerializer):
         model = CompanyRole
         fields = '__all__'
         
-        
-class CompanyRolePermissionSerializer(serializers.Serializer):
-    Company_role = CompanyRoleSerializer()
-    permissions = RolePermissiomSerializer(many=True)
-    
+
     def create(self, validated_data):
-        Company_role_data = validated_data.pop('Company_role')
-        permissions_data = validated_data.pop('permissions')
+        data = validated_data
 
         # get request user
         user = self.context['request'].user
@@ -93,21 +84,33 @@ class CompanyRolePermissionSerializer(serializers.Serializer):
             company = user.company_user
         elif user.role == "employee":
             company = user.office.company
-            
+        
         with transaction.atomic():
             # Create company role object 
-            company_role = CompanyRole.objects.create(company=company, **Company_role_data)
+            company_role = CompanyRole.objects.create(company=company, name=data['name'])
+
+            # Assign permissions to role
+            permissions = data['permission']
+            for codename in permissions:
+                permission = Permission.objects.get(codename=codename)
+                company_role.permission.add(permission)
             
-            # Create permissiona  for the role 
-            permissions_imstances = []
-            for permission in permissions_data:
-                permission_instance = RolePermissiom.objects.create(company=company, 
-                                                                    role=company_role,
-                                                                    **permission
-                                                                )
-                permissions_imstances.append(permission_instance)
-                
-        return {
-            'role': CompanyRoleSerializer(company_role).data,
-            'permissions': RolePermissiomSerializer(permissions_imstances, many=True).data,
-        }
+        return company_role
+    
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        permissions = validated_data.get('permission', [])
+
+        # Clear existing permissions
+        instance.permission.clear()
+
+        # Add new permissions
+        for codename in permissions:
+            permission = Permission.objects.get(codename=codename)
+            instance.permission.add(permission)
+            
+        # Save the updated instance
+        instance.save()
+
+        return instance

@@ -67,18 +67,8 @@ class BankAccounts(models.Model):
     bic = models.CharField(max_length=50, null=False, blank=False)
     
 
-class RolePermissiom(models.Model):
-    company = models.ForeignKey("Company", on_delete=models.CASCADE, 
-                               related_name='company_role_permissions', null=True, blank=True)
-    role = models.ForeignKey('CompanyRole', on_delete=models.CASCADE, 
-                             related_name='role_permission')
-    permission = models.ManyToManyField(Permission)
-    
-    # class Meta:
-    #     unique_together = ('company', 'role')
-        
-
 class CompanyRole(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
-    Company = models.ForeignKey('Company', on_delete=models.CASCADE, null=False,
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, null=False,
                                 blank=False, related_name='company_role')
+    permission = models.ManyToManyField(Permission)

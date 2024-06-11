@@ -135,6 +135,8 @@ class Login(APIView):
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
+            user_id = response_data['user']['id']
+            user, created = CustomUser.objects.get_or_create(user_id=user_id)
             # Registration Successful
             return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
         else:

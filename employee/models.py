@@ -17,8 +17,7 @@ class Employee(models.Model):
                             null=False, blank=False, related_name="employee")
     role = models.ForeignKey('office.CompanyRole', on_delete=models.CASCADE,
                               related_name='employee_role', null=True, blank=True)
-    office = models.ManyToManyField('office.Office', related_name='employee_offices',
-                                    null=True, blank=True)
+    office = models.ManyToManyField('office.Office', related_name='employee_offices',)
 
 class InviteEmployee(models.Model):
     STATUS_CHOICES = [

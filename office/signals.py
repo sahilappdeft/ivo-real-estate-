@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .utilis import create_company_role_and_permissions
 
 from .models import Company, CompanyRole
 
@@ -7,6 +8,5 @@ from .models import Company, CompanyRole
 def create_company(sender, instance, created, **kwargs):
     
     if created:
-        default_roles = ['admin', 'social worker', 'backend']
-        for role in default_roles:
-            CompanyRole.objects.create(name=role, Company=instance)
+        # create default roles and permissions
+        create_company_role_and_permissions(instance)

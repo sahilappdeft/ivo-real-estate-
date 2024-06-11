@@ -40,6 +40,14 @@ function decodeEmail(encodedEmail) {
   return decodedEmail;
 }
 
+
+function validatePhoneNumber(phoneNumber) {
+  // Regular expression for a basic phone number validation
+  const phoneRegex = /^\d{8}$|^\d{10}$/;
+  return phoneRegex.test(phoneNumber);
+}
+
+
 $(document).ready(function() {
   $(".form-control").each(function() {
       $(this).after("<span class='error-message text-danger'>hi</span>");

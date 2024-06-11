@@ -1,77 +1,146 @@
-{% extends "auth-base.html" %}
-{% load static %}
+{% extends "auth-base.html" %} {% load static %} {% block content %}
 
-{% block content %}
+<!-- api's-->
+<script src="{% static 'js/auth/sign-up.js' %}"></script>
 
-  <!-- api's-->
-  <script src="{% static 'js/auth/sign-up.js' %}"></script>
-
-  <!--start wrapper-->
-  <div class="wrapper-auth">
-    <div class="row login-container g-0 m-0">
-      <div class="col-xl-6 col-md-12">
-        <div class="register-cover d-flex align-items-end justify-content-end ">
-
-        </div>
-      </div>
-      <div class="col-xl-6 col-md-12 p-5 ">
-        <div class="login-cover-wrapper">
-          <div class="shadow-none">
-            <img src="{% static 'images/icons/logo.png' %}" alt="" width="150" class="mb-4" />
-            <h1 class="fw-semibold mb-5">Create New Account</h1>
-            <form class="form-body row g-3", id="signupForm">
-              <div class="col-12">
-                <label for="inputEmail" class="form-label fw-medium text-dark-color">Business Email</label>
-                <input type="email" class="form-control p-2" id="inputEmail">
-                <span id="emailError" class="text-danger error-message"></span>
-              </div>
-              <div class="col-6">
-                <label for="inputEmail" class="form-label fw-medium text-dark-color">First Name</label>
-                <input type="text" class="form-control p-2" id="inputFirstName">
-                <span id="firstNameError" class="text-danger error-message"></span>
-              </div>
-              <div class="col-6">
-                <label for="inputEmail" class="form-label fw-medium text-dark-color">Last Name</label>
-                <input type="text" class="form-control p-2" id="inputLastName">
-                <span id="lastNameError" class="text-danger error-message"></span>
-              </div>
-              <div class="col-12">
-                <label for="inputPassword" class="form-label fw-medium text-dark-color">Password</label>
-                <input type="password" class="form-control p-2" id="inputPassword">
-                <span id="passwordError" class="text-danger error-message"></span>
-              </div>
-              <div class="col-12">
-                <label for="inputPassword" class="form-label fw-medium text-dark-color">Confirm Password</label>
-                <input type="password" class="form-control p-2" id="inputConfirmPassword">
-                <span id="confirmPasswordError" class="text-danger error-message"></span>
-              </div>
-
-              <div class="col-12 col-lg-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label fw-medium text-light-gray" for="flexCheckDefault">
-                    I've read and accept the <a href="" class="text-main">Terms & Conditions</a> and <a href="" class="text-main">Privacy Policy</a>
-                  </label>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-12">
-                <div class="d-grid">
-                  <button type="button" id="submitBtn" class="btn bg-main text-white p-2">Sign Up</button>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-12 text-center">
-                <p class="mb-0">Already have an account? <a class="text-main font-14 fw-medium"
-                    href="{% url 'login' %}">Login</a></p>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
+<!--start wrapper-->
+<div class="wrapper-auth">
+  <div class="row login-container g-0 m-0">
+    <div class="col-xl-6 col-md-12">
+      <div
+        class="register-cover d-flex align-items-end justify-content-end"
+      ></div>
     </div>
-    <!--end row-->
+    <div class="col-xl-6 col-md-12 p-5">
+      <div class="login-cover-wrapper">
+        <div class="shadow-none">
+          <img
+            src="{% static 'images/icons/logo.png' %}"
+            alt=""
+            width="150"
+            class="mb-4"
+          />
+          <h1 class="fw-semibold mb-5">Create New Account</h1>
+          <form class="form-body row g-3" , id="signupForm">
+            <div class="col-12">
+              <label
+                for="inputEmail"
+                class="form-label fw-medium text-dark-color"
+                >Business Email</label
+              >
+              <input type="email" class="form-control p-2" id="inputEmail" />
+              <span id="emailError" class="text-danger error-message"></span>
+            </div>
+            <div class="col-6">
+              <label
+                for="inputEmail"
+                class="form-label fw-medium text-dark-color"
+                >First Name</label
+              >
+              <input type="text" class="form-control p-2" id="inputFirstName" />
+              <span
+                id="firstNameError"
+                class="text-danger error-message"
+              ></span>
+            </div>
+            <div class="col-6">
+              <label
+                for="inputEmail"
+                class="form-label fw-medium text-dark-color"
+                >Last Name</label
+              >
+              <input type="text" class="form-control p-2" id="inputLastName" />
+              <span id="lastNameError" class="text-danger error-message"></span>
+            </div>
+            <div class="col-12">
+              <label
+                for="inputPassword"
+                class="form-label fw-medium text-dark-color"
+                >Password</label
+              >
+              <div class="position-relative">
+                <input
+                  type="password"
+                  class="form-control p-2"
+                  id="inputPassword"
+                />
+                <div
+                  class="position-absolute password-icon togglePassword"
+                >
+                  <i class="lni lni-eye fs-6"></i>
+                </div>
+              </div>
+              <span id="passwordError" class="text-danger error-message"></span>
+            </div>
+            <div class="col-12">
+              <label
+                for="inputPassword"
+                class="form-label fw-medium text-dark-color"
+                >Confirm Password</label
+              >
+              <div class="position-relative">
+                <input
+                  type="password"
+                  class="form-control p-2"
+                  id="inputConfirmPassword"
+                />
+                <div
+                  class="position-absolute password-icon togglePassword"
+                >
+                  <i class="lni lni-eye fs-6"></i>
+                </div>
+              </div>
+              <span
+                id="confirmPasswordError"
+                class="text-danger error-message"
+              ></span>
+            </div>
+
+            <div class="col-12 col-lg-12">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                />
+                <label
+                  class="form-check-label fw-medium text-light-gray"
+                  for="flexCheckDefault"
+                >
+                  I've read and accept the
+                  <a href="" class="text-main">Terms & Conditions</a> and
+                  <a href="" class="text-main">Privacy Policy</a>
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-12">
+              <div class="d-grid">
+                <button
+                  type="button"
+                  id="submitBtn"
+                  class="btn bg-main text-white p-2"
+                >
+                  Sign Up
+                </button>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-12 text-center">
+              <p class="mb-0">
+                Already have an account?
+                <a class="text-main font-14 fw-medium" href="{% url 'login' %}"
+                  >Login</a
+                >
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  <!--end wrapper-->
+  <!--end row-->
+</div>
+<!--end wrapper-->
 {% endblock %}

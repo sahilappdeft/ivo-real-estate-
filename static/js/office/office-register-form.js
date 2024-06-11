@@ -141,7 +141,7 @@ function companyRole(){
 function updateProfileRoles(roles) {
     // Get all div elements with the class 'profile-role'
     var profileRoles = document.querySelectorAll('.profile-role');
-
+    roleTitles = document.querySelectorAll('.role-label');
     // Ensure the number of roles matches the number of profile-role elements
     if (roles.length !== profileRoles.length) {
         console.error('Mismatch between roles and profile-role elements');
@@ -151,17 +151,11 @@ function updateProfileRoles(roles) {
     // Loop through each profile-role element and update the name attribute and add a label
     roles.forEach((role, index) => {
         profileRoles[index].setAttribute('name', role.id);
+
+        if (roleTitles) {
+            roleTitles[index].textContent = role.name; // Set the text content to the role name
+        }
         
-        // Check if a label already exists, if not, create one
-       // var label = profileRoles[index].querySelector('.role-label');
-        // if (!label) {
-        //     label = document.createElement('label');
-        //     label.className = 'role-label';
-        //     profileRoles[index].appendChild(label);
-        // }
-        
-        // Update the label text
-        //label.textContent = role.name;
     });
 }
 

@@ -41,7 +41,12 @@
               </div>
               <div class="col-12">
                 <label for="inputPassword" class="form-label fw-medium text-dark-color">Password</label>
+                <div class="position-relative">
                 <input type="password" class="form-control p-2" id="inputPassword">
+                <div class="position-absolute password-icon   togglePassword">
+                  <i class="lni lni-eye fs-6" ></i>
+                </div>
+                </div>
                 <span id="passwordError" class="text-danger error-message"></span>
               </div>
 
@@ -73,6 +78,7 @@
     <!--end row-->  
   </div>
   <!--end wrapper-->
+  
 {% endblock %}
 
 

@@ -107,9 +107,10 @@ $(document).ready(function () {
             var name =  $(this).attr('name'); 
             var value = $(this).val().trim(); 
             // check validation
-            isValid = formValidation(name, value, id)
-            console.log(isValid, "under iteration input")
-    
+            if(!formValidation(name, value, id)){
+                console.log("ssssss")
+                isValid=false
+            }    
         });
         console.log(isValid, "isValid isValid")
         if (isValid){

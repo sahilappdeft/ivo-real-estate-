@@ -60,11 +60,11 @@
         </a>
         <div class="d-flex gap-3 align-items-center">
           <img
-            src="{% static 'images/icons/01.png' %}"
+            src="{% static 'images/icons/01.jpg' %}"
             class="rounded-circle avatar-img"
             alt="..."
           />
-          <p class="text-black fw-semibold m-0">Mark Antony</p>
+          <p class="text-black fw-semibold m-0" id="user-name">----name----</p>
         </div>
       </div>
     </nav>
@@ -187,7 +187,7 @@
                         >Zip Code</label
                       >
                       <input
-                        type="text"
+                        type="number"
                         class="form-control"
                         id="zip-code"
                         name="zipcode"
@@ -495,23 +495,27 @@
                     style="width: 70%"
                   />
                 </div>
-                <label class="role-label"></label>
+                <p class="role-label text-center fw-semibold mt-2">fdghgf</p>
               </div>
-              <div class="profile-role" name="1">
-                <img
-                  src="{% static 'images/authentication/backend.png' %}"
-                  alt=""
-                  style="width: 80%"
-                />
-                <label class="role-label"></label>
+              <div>
+                <div class="profile-role" name="1">
+                  <img
+                    src="{% static 'images/authentication/backend.png' %}"
+                    alt=""
+                    style="width: 80%"
+                  />
+                </div>
+                <p class="role-label text-center fw-semibold mt-2">fdghgf</p>
               </div>
-              <div class="profile-role" name="1">
-                <img
-                  src="{% static 'images/authentication/social-worker.png' %}"
-                  alt=""
-                  style="width: 80%"
-                />
-                <label class="role-label"></label>
+              <div>
+                <div class="profile-role" name="1">
+                  <img
+                    src="{% static 'images/authentication/social-worker.png' %}"
+                    alt=""
+                    style="width: 80%"
+                  />
+                </div>
+                <p class="role-label text-center fw-semibold mt-2">fdghgf</p>
               </div>
             </div>
           </div>
@@ -629,5 +633,17 @@
         </div>
       </div>
     </div>
+
+    <script>
+      $(document).ready(function () {
+        // Get the user's name from local storage
+        var user = JSON.parse(localStorage.getItem("user"));
+        var userName = user.name;
+        // Check if userName is not null and update the text content
+        if (userName) {
+          $("#user-name").text(userName);
+        }
+      });
+    </script>
   </body>
 </html>

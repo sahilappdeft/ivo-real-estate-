@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from auth_user.permission import IsTokenValid, token_required
 from .models import Office, CompanyRole
 from .serializers import (OfficeSerializer, OfficeAndBankAccountsSerializer,
-                          CompanyRoleSerializer, CompanyRolePermissionSerializer
+                          CompanyRoleSerializer
                         )
 
 
@@ -48,7 +48,7 @@ class CompanyRoleApiView(APIView):
             company = user.office.company
             
         # Get all CompanyRole objects   
-        company_roles = CompanyRole.objects.filter(Company=company)
+        company_roles = CompanyRole.objects.filter(company=company)
         
         # Serialize the data
         serializer = self.serializer_class(company_roles, many=True)
@@ -59,7 +59,7 @@ class CompanyRoleApiView(APIView):
     def post(self, request):
         
         data = request.data
-        serializer = CompanyRolePermissionSerializer(data=data)
+        serializer = CompanyRoleSerializer(data=data)
         
         if serializer.is_valid():
             

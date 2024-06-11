@@ -54,6 +54,7 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response, "::::::::::::::::::::::::::")
                 // Check if the response contains an access token
                 if (response && response.data && response.data.access_token) {
                     // Store the access token in the local storage
@@ -61,6 +62,8 @@ $(document).ready(function() {
                     // Optionally, you can also store the refresh token and token type if needed
                     localStorage.setItem('refresh_token', response.data.refresh_token);
                     localStorage.setItem('token_type', response.data.token_type);
+                    // Store the user data in the local storage
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
                     //redirecting to a dashboard page
                     window.location.href = BASE_URL + 'dashboard/';
                 } else {

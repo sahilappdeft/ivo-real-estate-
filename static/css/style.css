@@ -1719,3 +1719,8 @@ ul.categories-list li {
 .toast-message {
     font-size: 16px !important;
 }
+.password-icon{
+    top:16px ;
+    right:10px;
+    cursor:pointer;
+}
