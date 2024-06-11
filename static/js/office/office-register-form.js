@@ -96,7 +96,13 @@ function PostOfficeForm(){
             toastr.success("Office created sucessfully"); // Display error toaster
         },
         error: function(xhr, status, error) {
-            toaste
+            if (xhr.status === 401) {
+                console.log('Authentication failed. Redirecting to login page...');
+                window.location.href = BASE_URL; // Redirect to login page
+            } else {
+                console.error('An error occurred:', error);
+                toastr.error("An error occurred: " + error); // Display error toaster
+            }
         }
     });
 }
@@ -121,8 +127,13 @@ function companyRole(){
 
         },
         error: function(xhr, status, error) {
-            console.error('Error sending GET request:', error);
-            // Handle error response
+            if (xhr.status === 401) {
+                console.log('Authentication failed. Redirecting to login page...');
+                window.location.href = BASE_URL; // Redirect to login page
+            } else {
+                console.error('An error occurred:', error);
+                toastr.error("An error occurred: " + error); // Display error toaster
+            }
         }
     });
 }
