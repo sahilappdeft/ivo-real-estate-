@@ -2,21 +2,23 @@ from django.db import transaction
 from django.contrib.auth.models import Permission
 
 from rest_framework import serializers
-from .models import Office, BankAccounts, Company, CompanyRole
+from .models import Office, BankAccounts, Company, CompanyRole, OfficeUnit
 from employee.serializers import InviteEmployeeSerializer
 from employee.models import InviteEmployee
 
 class OfficeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Office
-        exclude = ['company', 'user']
-
+        # exclude = ['company', 'user']
+        extra_kwargs = {
+            'user': {'read_only': True},
+            'company': {'read_only': True}
+        }
 
 class BankAccountsSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankAccounts
         fields = ['purpose', 'owner_name', 'iban', 'bic']
-
 
 
 class OfficeAndBankAccountsSerializer(serializers.Serializer):
@@ -92,8 +94,13 @@ class CompanyRoleSerializer(serializers.ModelSerializer):
             # Assign permissions to role
             permissions = data['permission']
             for codename in permissions:
-                permission = Permission.objects.get(codename=codename)
-                company_role.permission.add(permission)
+                try:
+                    #By pass the permmison if permission not founds
+                    permission = Permission.objects.get(codename=codename)
+                    company_role.permission.add(permission)
+                except Exception as e:
+                    print(e)
+                    
             
         return company_role
     
@@ -107,10 +114,19 @@ class CompanyRoleSerializer(serializers.ModelSerializer):
 
         # Add new permissions
         for codename in permissions:
-            permission = Permission.objects.get(codename=codename)
-            instance.permission.add(permission)
-            
+            try: 
+                #By pass the permmison if permission not found
+                permission = Permission.objects.get(codename=codename)
+                instance.permission.add(permission)
+            except Exception as e:
+                print(e)
         # Save the updated instance
         instance.save()
 
         return instance
+    
+
+class OfficeUnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfficeUnit
+        fields = '__all__'

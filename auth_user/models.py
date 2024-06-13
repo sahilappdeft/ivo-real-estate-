@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from utility.models import BaseModel
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -24,13 +26,13 @@ class CustomUserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
-
-class CustomUser(AbstractUser):
+        
+        
+class CustomUser(AbstractUser, BaseModel):
     ROLE_CHOICES = (
         ('superadmin', 'Superadmin'),
         ('admin', 'Admin'),
-        ('company', 'Company'),
-        ('employee', 'Employee'),
+        ('user', 'User')
     )
     username = None
     email = models.EmailField(unique=True)

@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'auth_user',
     'office',
     'employee',
-    'dashboard',
 ]
 
 MIDDLEWARE = [

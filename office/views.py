@@ -6,11 +6,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 
 from auth_user.permission import IsTokenValid, token_required
-from .models import Office, CompanyRole
+from .models import Office, CompanyRole, OfficeUnit
 from .serializers import (OfficeSerializer, OfficeAndBankAccountsSerializer,
-                          CompanyRoleSerializer
+                          CompanyRoleSerializer, OfficeUnitSerializer, OfficeSerializer
                         )
 
 
@@ -18,9 +19,23 @@ class OfficeApiView(APIView):
     queryset = Office.objects.all()
     serializer_class = OfficeSerializer
     
-    def get(self, request):
-        # Render the HTML template for verify user
-        return render(request, 'office-register.html')
+    @action(detail=False, methods=['get'])
+    @token_required  # assuming you have a token_required decorator
+    def office_list(self, request):
+        
+        user = request.user
+        # Check the user's role to determine the company
+        if user.role == "company":
+            company = user.company_user
+        elif user.role == "employee":
+            company = user.office.company
+        
+        # Filter offices based on the company
+        offices = Office.objects.filter(company=company)
+        serializer = OfficeSerializer(offices, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
     
     @method_decorator(token_required)
     def post(self, request):
@@ -35,11 +50,15 @@ class OfficeApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
-class CompanyRoleApiView(APIView):
+class CompanyRoleViewSet(viewsets.ModelViewSet):
+    '''
+    This class provide the crud of the compnay role.
+    '''
     serializer_class = CompanyRoleSerializer
-    
+    queryset = CompanyRole.objects.all()
+
     @method_decorator(token_required)
-    def get(self, request):
+    def list(self, request):
         
         user=request.user
         if user.role == "company":
@@ -56,15 +75,29 @@ class CompanyRoleApiView(APIView):
         # Return serialized data with status 200
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def post(self, request):
+    def delete(self, request, pk=None):
+        try:
+            company_role = self.get_queryset().get(pk=pk)
+        except CompanyRole.DoesNotExist:
+            return Response({"error": "Company role not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        data = request.data
-        serializer = CompanyRoleSerializer(data=data)
-        
-        if serializer.is_valid():
-            
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-
+        company_role.soft_delete()
+        return Response({"message": "Deleted Sucessfully"}, status=status.HTTP_204_NO_CONTENT)
     
+
+class OfficeUnitViewSet(viewsets.ModelViewSet):
+    '''
+    This class provide the crud of the office unit.
+    '''
+    queryset = OfficeUnit.objects.all()
+    serializer_class = OfficeUnitSerializer
+    permission_classes = (IsTokenValid,)
+    
+    def destroy(self, request, pk=None):
+        try:
+            company_role = self.get_queryset().get(pk=pk)
+        except OfficeUnit.DoesNotExist:
+            return Response({"error": "Office unit not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        company_role.soft_delete()
+        return Response({"message": "Deleted Sucessfully"}, status=status.HTTP_204_NO_CONTENT)
