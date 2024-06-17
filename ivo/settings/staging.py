@@ -7,25 +7,24 @@ DEBUG = True
 
 # Database settings for PostgreSQL
 
-# if os.getcwd() == "/home/ubuntu/IVO":
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': 'ivodb',
-#             'USER': 'ivoportal',
-#             'PASSWORD': 'Psdnj@Eecezc3233r',
-#             'HOST': 'localhost',
-#             'PORT': '5432',
-#         }
-#     }
-# else:
-DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
-}
-}
-# }
+if os.getcwd() == "/home/ubuntu/IVO":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'ivodb',
+            'USER': 'ivoportal',
+            'PASSWORD': 'Psdnj@Eecezc3233r',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Email settings
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

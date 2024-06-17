@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -11,7 +12,8 @@ from .utilis import call_auth_microservice
 from utility.emailTemplates import send_verify_email, send_forgot_password_email
 from .models import CustomUser
 from .permission import IsTokenValid
-
+from employee.models import InviteEmployee, Employee
+from office.models import OfficeEmployee
 
 # Define Django views that communicate with FastAPI endpoints
 
@@ -19,12 +21,6 @@ class RegisterUser(APIView):
     """
     API endpoint for user registration.
     """
-    
-    def get(self, request):
-        # Render the HTML template for register user
-        return render(request, 'sign-up.html')
-    
-    @csrf_exempt
     def post(self, request):
         print("::::::::::::::::::::::::::::::::OPOPOPOPO")
         data = request.data
@@ -75,12 +71,6 @@ class VerifyEmail(APIView):
     """
     API endpoint for verifying user email.
     """
-    
-    def get(self, request):
-        # Render the HTML template for verify user
-        return render(request, 'otp-verfication.html')
-    
-    @csrf_exempt
     def post(self, request):
         data = request.data
 
@@ -111,11 +101,6 @@ class Login(APIView):
     """
     API endpoint for user login.
     """
-    def get(self, request):
-        # Render the HTML template for login password
-        return render(request, 'sign-in.html')
-    
-    @csrf_exempt
     def post(self, request):
         data = request.data
 
@@ -151,7 +136,6 @@ class ChangePassword(APIView):
     """
     permission_classes = (IsTokenValid,)
     
-    @csrf_exempt
     def post(self, request):
         data = request.data
         # Extract token from the request header
@@ -184,7 +168,6 @@ class SendOtp(APIView):
     reset his password.
     """
 
-    @csrf_exempt
     def post(self, request, *args, **kwargs):
         data = request.data
         otp_type = self.kwargs.get('type')
@@ -226,16 +209,6 @@ class ForgotPassword(APIView):
     """
     API endpoint for change user password with otp.
     """
-    def get(self, request):
-        # Check the request path to determine which template to render
-        if 'forgot-otp' in request.path:
-            return render(request, 'otp-verfication.html')
-        elif 'forgot-email' in request.path:
-            return render(request, 'reset-email.html')
-        else:
-            return render(request, 'reset-password.html')
-    
-    @csrf_exempt
     def post(self, request):
         data = request.data
         
@@ -261,16 +234,6 @@ class ForgotPassword(APIView):
             return Response({"error": error_message}, status=response.status_code)
     
 
-class ForgotPawwordSucess(APIView):
-    """
-    API endpoint for render forgot password sucess.html.
-    """
-    def get(self, request):
-        # Render the HTML template for verify user
-        return render(request, 'forgot-sucess.html')
-    
-
-from employee.models import InviteEmployee, Employee
 class SetupAccount(APIView):
     
     def get(self, request):
@@ -299,20 +262,41 @@ class SetupAccount(APIView):
                 response_data = response.json()
                 user_id = response_data.get('id')
                 email = response_data.get('email')
-                #create user wih response User-ID.
-                user = CustomUser.objects.create(user_id=user_id, role="employee", email=email)
                 
-                # get employee obj
-                employee = Employee.objects.get(user=user)
-                employee.role = invite_employe.role
-                employee.office.add(invite_employe.sender)
-                employee.save()
-                
-                # set-up sucessfully
-                return Response({"message": "Account Set-up Successfully"}, status=status.HTTP_200_OK)
+                try:
+                    with transaction.atomic():
+                        #create user wih response User-ID.
+                        user = CustomUser.objects.create(user_id=user_id, role="user", email=email)
+                        
+                        # get or create employee obj with company
+                        employee = Employee.objects.get_or_create(user=user)
+                        employee.role = invite_employe.role
+                        employee.company = invite_employe.sender.company
+                        employee.save()
+                        
+                        # assign employee to office
+                        OfficeEmployee.objects.get_or_create(employee=employee, office=invite_employe.sender)
+                        
+                        # set-up sucessfully
+                        return Response({"message": "Account Set-up Successfully"}, status=status.HTTP_200_OK)
+                except Exception as e:
+                    return Response({"error": "Something went wrong while setu-up account"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 # Return error from the authentication microservice
                 error_message = response.json().get('detail', 'Unknown error')
                 return Response({"error": error_message}, status=response.status_code)
         else:
             return Response({"error": "Invalid invitation"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        
+from auth_user.permission import IsTokenValid, token_required
+from django.utils.decorators import method_decorator
+
+class UserDeleteView(APIView):
+    queryset = CustomUser.objects.all()
+    
+    @method_decorator(token_required)
+    def delete(self, request, *args, **kwargs):
+        user = request.user
+        user.soft_delete()
+        return Response({"success": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT)

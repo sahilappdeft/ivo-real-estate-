@@ -52,7 +52,7 @@ def send_verify_email(subject, recipients, otp, user_name="N/A"):
 
 def send_forgot_password_email(subject, recipients, otp, user_name="N/A"):
     try:
-        html_content = render_to_string('email-templates/FORGOT.html', {
+        html_content = render_to_string('email-templates/forgot.html', {
                                         'otp': otp, 'user_name': user_name})
         text_content = strip_tags(html_content)
 

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import Permission
 from django.db.models.signals import post_save
+from utility.models import BaseModel
 
 
 class BulkCreateManager(models.Manager):
@@ -12,14 +13,15 @@ class BulkCreateManager(models.Manager):
 
 
 # Create your models here.
-class Employee(models.Model):
+class Employee(BaseModel):
     user = models.ForeignKey('auth_user.Customuser', on_delete=models.CASCADE, 
                             null=False, blank=False, related_name="employee")
     role = models.ForeignKey('office.CompanyRole', on_delete=models.CASCADE,
                               related_name='employee_role', null=True, blank=True)
     office = models.ManyToManyField('office.Office', related_name='employee_offices',)
 
-class InviteEmployee(models.Model):
+
+class InviteEmployee(BaseModel):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
