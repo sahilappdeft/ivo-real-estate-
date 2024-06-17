@@ -21,12 +21,6 @@ class RegisterUser(APIView):
     """
     API endpoint for user registration.
     """
-    
-    def get(self, request):
-        # Render the HTML template for register user
-        return render(request, 'sign-up.html')
-    
-    @csrf_exempt
     def post(self, request):
         print("::::::::::::::::::::::::::::::::OPOPOPOPO")
         data = request.data
@@ -77,12 +71,6 @@ class VerifyEmail(APIView):
     """
     API endpoint for verifying user email.
     """
-    
-    def get(self, request):
-        # Render the HTML template for verify user
-        return render(request, 'otp-verfication.html')
-    
-    @csrf_exempt
     def post(self, request):
         data = request.data
 
@@ -113,11 +101,6 @@ class Login(APIView):
     """
     API endpoint for user login.
     """
-    def get(self, request):
-        # Render the HTML template for login password
-        return render(request, 'sign-in.html')
-    
-    @csrf_exempt
     def post(self, request):
         data = request.data
 
@@ -153,7 +136,6 @@ class ChangePassword(APIView):
     """
     permission_classes = (IsTokenValid,)
     
-    @csrf_exempt
     def post(self, request):
         data = request.data
         # Extract token from the request header
@@ -186,7 +168,6 @@ class SendOtp(APIView):
     reset his password.
     """
 
-    @csrf_exempt
     def post(self, request, *args, **kwargs):
         data = request.data
         otp_type = self.kwargs.get('type')
@@ -228,16 +209,6 @@ class ForgotPassword(APIView):
     """
     API endpoint for change user password with otp.
     """
-    def get(self, request):
-        # Check the request path to determine which template to render
-        if 'forgot-otp' in request.path:
-            return render(request, 'otp-verfication.html')
-        elif 'forgot-email' in request.path:
-            return render(request, 'reset-email.html')
-        else:
-            return render(request, 'reset-password.html')
-    
-    @csrf_exempt
     def post(self, request):
         data = request.data
         
@@ -261,15 +232,6 @@ class ForgotPassword(APIView):
         else:
             error_message = response.json().get('detail', 'Unknown error')
             return Response({"error": error_message}, status=response.status_code)
-    
-
-class ForgotPawwordSucess(APIView):
-    """
-    API endpoint for render forgot password sucess.html.
-    """
-    def get(self, request):
-        # Render the HTML template for verify user
-        return render(request, 'forgot-sucess.html')
     
 
 class SetupAccount(APIView):

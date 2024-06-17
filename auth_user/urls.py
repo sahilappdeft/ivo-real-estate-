@@ -11,9 +11,6 @@ urlpatterns = [
     path('send-otp/<str:type>/', views.SendOtp.as_view(), name='send-otp' ),
     
     path('forgot-password/', views.ForgotPassword.as_view(), name='forgot-password'),
-    path('forgot-otp/', views.ForgotPassword.as_view(), name='forgot-otp'),
-    path('forgot-email/', views.ForgotPassword.as_view(), name='forgot-email'),
-    path('forgot-password-sucess/', views.ForgotPawwordSucess.as_view(), name='forgot-sucess'),
     path('delete_user/', views.UserDeleteView.as_view(), name='delete_user'),
 
 ]
