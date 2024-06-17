@@ -7,7 +7,7 @@ DEBUG = True
 
 # Database settings for PostgreSQL
 
-print(os.getcwd, "PPPPPPPPPPPPPPPPP")
+print(os.getcwd(), "PPPPPPPPPPPPPPPPP")
 if os.getcwd() == "/home/ubuntu/IVO/ivo-real-estate/":
     print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLdsdsLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
     DATABASES = {
