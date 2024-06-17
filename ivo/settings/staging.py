@@ -7,7 +7,7 @@ DEBUG = True
 
 # Database settings for PostgreSQL
 
-if os.getcwd() == "/home/ubuntu/IVO":
+if os.getcwd() == "/home/ubuntu/IVO/ivo-real-estate/":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
