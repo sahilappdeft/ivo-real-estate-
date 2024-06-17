@@ -50,6 +50,8 @@ class Office(BaseModel):
     cost_center = models.CharField(max_length=255, null=False, blank=False)
     office_type = models.CharField(max_length=100, choices=OFFICE_TYPE_CHOICES,
                                     default=NORMAL_OFFICE)
+    office_rep = models.ForeignKey('employee.Employee', on_delete=models.SET_NULL,
+                                   related_name='office_rep', null=True, blank=True)
     user = models.ForeignKey('auth_user.Customuser', on_delete=models.CASCADE, 
                                 null=False, blank=False, related_name="office")
     company = models.ForeignKey('Company', on_delete=models.CASCADE, null=False,
@@ -60,7 +62,7 @@ class Office(BaseModel):
 
 
 class BankAccounts(BaseModel):
-    Office = models.ForeignKey('Office', on_delete=models.CASCADE, null=False,
+    office = models.ForeignKey('Office', on_delete=models.CASCADE, null=False,
                                blank=False, related_name='offic_banks')
     purpose = models.CharField(max_length=255, null=False, blank=False)
     owner_name = models.CharField(max_length=255, null=False, blank=False)
@@ -73,3 +75,12 @@ class CompanyRole(BaseModel):
     company = models.ForeignKey('Company', on_delete=models.CASCADE, null=False,
                                 blank=False, related_name='company_role')
     permission = models.ManyToManyField(Permission)
+
+
+class OfficeEmployee(BaseModel):
+    position = models.CharField(max_length=50)
+    office = models.ForeignKey('Office', on_delete=models.CASCADE, related_name='office_employee')
+    employee = models.ForeignKey('employee.Employee', on_delete=models.CASCADE, related_name='employee_office')
+    
+    class Meta:
+        unique_together = ('office', 'employee')
