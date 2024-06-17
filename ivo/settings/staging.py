@@ -20,6 +20,7 @@ if os.getcwd() == "/home/ubuntu/IVO/ivo-real-estate/":
         }
     }
 else:
+    print(":::::::::::::::::::::::::;;;;;;")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
