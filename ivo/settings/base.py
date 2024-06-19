@@ -144,7 +144,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+
 BASE_URL = os.environ.get('BASE_URL')
+
 FASTAPI_BASE_URL = os.environ.get('FASTAPI_BASE_URL')
 
+print( os.environ.get('FASTAPI_BASE_URL'))
 AUTH_USER_MODEL = 'auth_user.Customuser' 

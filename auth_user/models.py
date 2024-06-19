@@ -38,7 +38,6 @@ class CustomUser(AbstractUser, BaseModel):
     email = models.EmailField(unique=True)
     user_id = models.IntegerField(unique=True, null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
     first_name = models.CharField(max_length=100)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES,
                             default="company", null=False, blank=False)

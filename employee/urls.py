@@ -5,9 +5,7 @@ from .views import*
 app_name = 'office'
 
 router = DefaultRouter()
-router.register(r'roles/(?P<company>\d+)', CompanyRoleViewSet)
-router.register(r'unit/(?P<company>\d+)', OfficeUnitViewSet)
-router.register(r'offices/(?P<company>\d+)', OfficeApiView, basename='office')
+router.register(r'employee/(?P<company>\d+)', EmployeeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

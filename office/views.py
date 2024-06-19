@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django_filters import rest_framework as filters
 from django.db import models
 
 from rest_framework import status
@@ -10,63 +9,44 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 
+from utility.helpers import success, error
 from auth_user.permission import IsTokenValid, token_required
-from .models import Office, CompanyRole, OfficeUnit
+from .models import Office, CompanyRole, OfficeUnit, Company
 from .serializers import (OfficeSerializer, OfficeAndBankAccountsSerializer,
-                          CompanyRoleSerializer, OfficeUnitSerializer, OfficeSerializer
+                          CompanyRoleSerializer, OfficeUnitSerializer, OfficeSerializer,
+                          DetailedOfficeSerializer, DetailCompanyRoleSerializer
                         )
-
-
-class OfficeFilter(filters.FilterSet):
-    name = filters.CharFilter(field_name='name', lookup_expr='icontains')
-    address = filters.CharFilter(field_name='address', lookup_expr='icontains')
-    
-    class Meta:
-        model = Office
-        fields = ['name', 'address', 'office_units', 'office_rep']
+from .filters import OfficeFilter
 
 class OfficeApiView(viewsets.ModelViewSet):
     serializer_class = OfficeSerializer
-    # permission_classes = (IsTokenValid,)
+    permission_classes = (IsTokenValid,)
     filterset_class = OfficeFilter
 
     def get_queryset(self):
         queryset = Office.objects.all()
         employee_count = self.request.query_params.get('employee_count', None)
-        print(employee_count, "employee_count")
-        print(queryset, "queryset")
         if employee_count:
             # Filter based on the count of related employees
             queryset = queryset.annotate(num_employees=models.Count('office_employee')).filter(num_employees=employee_count)
         return queryset
 
-    def list(self, request, *args, **kwargs):
-        print(self.get_queryset(),"::455454::")
-        return super().list(request, *args, **kwargs)
-    # def list(self, request):
-    #     # Render the HTML template for office register  
-    #     return render(request, 'office-register.html')
-    
-    @action(detail=False, methods=['get'])
+    # @action(detail=False, methods=['get'])
     # @token_required  # assuming you have a token_required decorator
-    def office_list(self, request):
-        
-        user = request.user
-        # Check the user's role to determine the company
-        # if user.role == "company":
-        #     company = user.company_user
-        # elif user.role == "employee":
-        #     company = user.office.company
-        company = user.employee_company.company
+    def list(self, request, *args, **kwargs):
+          
+        company_id = kwargs.get('company')
+        try:
+            company = Company.objects.get(id=company_id)
+        except Company.DoesNotExist:
+            return Response(error('Company not found', {}), status=status.HTTP_404_NOT_FOUND)
         
         # Filter offices based on the company
-        offices = Office.objects.filter(company=company)
+        offices = self.get_queryset().filter(company=company)
         serializer = OfficeSerializer(offices, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
         
-    
-    @method_decorator(token_required)
     def create(self, request):
         serializer = OfficeAndBankAccountsSerializer(data=request.data)
 
@@ -78,6 +58,11 @@ class OfficeApiView(viewsets.ModelViewSet):
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = DetailedOfficeSerializer(instance)
+        return Response(serializer.data)
+    
     
 class CompanyRoleViewSet(viewsets.ModelViewSet):
     '''
@@ -85,16 +70,15 @@ class CompanyRoleViewSet(viewsets.ModelViewSet):
     '''
     serializer_class = CompanyRoleSerializer
     queryset = CompanyRole.objects.all()
+    permission_classes = (IsTokenValid,)
 
-    @method_decorator(token_required)
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
         
-        user=request.user
-        # if user.role == "company":
-        #     company = user.company_user
-        # elif user.role == "employee":
-        #     company = user.office.company
-        company = user.employee_company.company
+        company_id = kwargs.get('company')
+        try:
+            company = Company.objects.get(id=company_id)
+        except Company.DoesNotExist:
+            return Response(error('Company not found', {}), status=status.HTTP_404_NOT_FOUND)
             
         # Get all CompanyRole objects   
         company_roles = CompanyRole.objects.filter(company=company)
@@ -105,7 +89,7 @@ class CompanyRoleViewSet(viewsets.ModelViewSet):
         # Return serialized data with status 200
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def delete(self, request, pk=None):
+    def delete(self, request, company=None, pk=None):
         try:
             company_role = self.get_queryset().get(pk=pk)
         except CompanyRole.DoesNotExist:
@@ -114,6 +98,10 @@ class CompanyRoleViewSet(viewsets.ModelViewSet):
         company_role.soft_delete()
         return Response({"message": "Deleted Sucessfully"}, status=status.HTTP_204_NO_CONTENT)
     
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = DetailCompanyRoleSerializer(instance)
+        return Response(serializer.data)
 
 class OfficeUnitViewSet(viewsets.ModelViewSet):
     '''

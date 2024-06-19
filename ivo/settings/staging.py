@@ -7,9 +7,7 @@ DEBUG = True
 
 # Database settings for PostgreSQL
 
-print(os.getcwd(), "PPPPPPPPPPPPPPPPP")
 if os.getcwd() == "/home/ubuntu/IVO/ivo-real-estate":
-    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLdsdsLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -21,7 +19,6 @@ if os.getcwd() == "/home/ubuntu/IVO/ivo-real-estate":
         }
     }
 else:
-    print(":::::::::::::::::::::::::;;;;;;")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

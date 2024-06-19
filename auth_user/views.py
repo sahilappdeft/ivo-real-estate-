@@ -8,9 +8,11 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
 from utility.helpers import success, error
-from .utilis import call_auth_microservice
+from utility.fast_api import call_auth_microservice
 from utility.emailTemplates import send_verify_email, send_forgot_password_email
+
 from .models import CustomUser
+from .serializers import CustomUserSerializer
 from .permission import IsTokenValid
 from employee.models import InviteEmployee, Employee
 from office.models import OfficeEmployee
@@ -22,7 +24,6 @@ class RegisterUser(APIView):
     API endpoint for user registration.
     """
     def post(self, request):
-        print("::::::::::::::::::::::::::::::::OPOPOPOPO")
         data = request.data
 
         if not 'first_name' in data and not 'last_name' in data:
@@ -37,10 +38,10 @@ class RegisterUser(APIView):
             # Password should same to confirm password
             return Response(error("confirm password does not match password", {}), status=status.HTTP_400_BAD_REQUEST)
 
-          
+        
         #hit request to auth microservice
         response = call_auth_microservice('/signup', data)
-
+        
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
@@ -48,8 +49,6 @@ class RegisterUser(APIView):
             email = response_data.get('email')
             first_name = response_data.get('first_name')
             last_name = response_data.get('last_name')
-
-            print(response_data, "::::::::::::::::", email)
 
             #create user wih response User-ID.
             user = CustomUser.objects.create(user_id=user_id, email=email,
@@ -115,13 +114,15 @@ class Login(APIView):
         #hit request to auth microservice
         response = call_auth_microservice('/login', data)
         
-        print(response, ":::::::::::OOO")
-
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
             user_id = response_data['user']['id']
             user, created = CustomUser.objects.get_or_create(user_id=user_id)
+            
+            user_serliaze_data = CustomUserSerializer(user)
+            response_data['user']=user_serliaze_data.data
+            
             # Registration Successful
             return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
         else:

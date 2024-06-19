@@ -9,6 +9,24 @@ class InviteEmployeeSerializer(serializers.ModelSerializer):
         
         
 class EmployeeSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Employee
-        fields = ['user', 'role']
+        exclude = ['company']
+        depth = 1
+        
+
+class DetailEmployeeSerializer(serializers.ModelSerializer):
+    
+    offices = serializers.SerializerMethodField()
+    class Meta:
+        model = Employee
+        exclude = ['company']
+        depth = 1
+    
+    def get_offices(self, instance):
+        
+        offices = instance.employee_office
+        if offices:
+            return offices
+        return []

@@ -81,3 +81,20 @@ def send_invite_employee_email(subject, recipient_email, link):
     except Exception as e:
         print(e)
         return False
+
+
+
+def send_mail(subject, recipient_email, context, template):
+    try:
+        html_content = render_to_string(template, context)
+        text_content = strip_tags(html_content)
+
+        msg = commonEmailInitialize(subject, [recipient_email], text_content)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        print('Email sent')
+        return True
+    except Exception as e:
+        print(e)
+        return False

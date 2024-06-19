@@ -4,7 +4,7 @@ from django.contrib.auth.models import Permission
 from rest_framework import serializers
 from .models import (Office, BankAccounts, Company, CompanyRole,
                      OfficeUnit, OfficeEmployee)
-from employee.serializers import InviteEmployeeSerializer
+from employee.serializers import InviteEmployeeSerializer, EmployeeSerializer
 from employee.models import InviteEmployee, Employee
 
   
@@ -22,8 +22,8 @@ class OfficeSerializer(serializers.ModelSerializer):
         
     def get_employee(self, instance):
         return instance.office_employee.all().count()
+     
     
-
 class BankAccountsSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankAccounts
@@ -33,9 +33,24 @@ class BankAccountsSerializer(serializers.ModelSerializer):
 class OfficeEmployeeSeriliazer(serializers.ModelSerializer):
     class Meta:
         model = OfficeEmployee
-        fields = ['office', 'employee']
+        fields = ['office', 'employee', 'position']
 
-      
+
+class GetOfficeEmployeeSeriliazer(serializers.ModelSerializer):
+    employee = serializers.SerializerMethodField()
+    class Meta:
+        model = OfficeEmployee
+        fields = ['id', 'office', 'employee', 'position']
+
+    def get_employee(self, instance):
+        data = {
+            'id': instance.employee.id,
+            'employee_id': instance.employee.employee_id,
+            'role': instance.employee.role.name
+        }
+        return data
+
+
 class OfficeAndBankAccountsSerializer(serializers.Serializer):
     office = OfficeSerializer()
     bank_accounts = BankAccountsSerializer(many=True)
@@ -52,15 +67,18 @@ class OfficeAndBankAccountsSerializer(serializers.Serializer):
         user = self.context['request'].user
         company = None
         
-        company = user.employee_company.company
+        try:
+            company = user.employee.company
+        except Company.DoesNotExist:
+            company = None
         try:
             with transaction.atomic():
-                if not user.employee_company:
+                if not company:
                     company = Company.objects.create(user=user)
                     # get admin role of company
                     role = CompanyRole.objects.get(name='admin')
                     # creae employe object for admin
-                    Employee.objects.create(company=company,user=user,
+                    employee = Employee.objects.create(company=company,user=user,
                                         role=role)
             
                 # Create office object without saving to the database
@@ -107,7 +125,7 @@ class CompanyRoleSerializer(serializers.ModelSerializer):
         #     company = user.company_user
         # elif user.role == "employee":
         #     company = user.office.company
-        company = user.employee_company.company
+        company = user.employee.company
         try:
             with transaction.atomic():
                 # Create company role object 
@@ -149,8 +167,41 @@ class CompanyRoleSerializer(serializers.ModelSerializer):
 
         return instance
     
+    
+class DetailCompanyRoleSerializer(serializers.ModelSerializer):
+    employees =serializers.SerializerMethodField()
+    
+    class Meta:
+        model = CompanyRole
+        fields = '__all__'
+
+    def get_employees(self, instance):
+        return Employee.objects.filter(role=instance)
+
 
 class OfficeUnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfficeUnit
         fields = '__all__'
+        
+        
+        
+class DetailedOfficeSerializer(serializers.ModelSerializer):
+    bank_accounts = serializers.SerializerMethodField()
+    employees = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Office
+        exclude = ['company', 'user',]
+
+    def get_bank_accounts(self, instance):
+        bank_accounts = instance.offic_banks.all()
+        if bank_accounts.exists():
+            return BankAccountsSerializer(bank_accounts, many=True).data
+        return []
+
+    def get_employees(self, instance):
+        employees = instance.office_employee.all()
+        if employees.exists():
+            return GetOfficeEmployeeSeriliazer(employees, many=True).data
+        return []

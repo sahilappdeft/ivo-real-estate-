@@ -14,11 +14,13 @@ class BulkCreateManager(models.Manager):
 
 # Create your models here.
 class Employee(BaseModel):
-    user = models.ForeignKey('auth_user.Customuser', on_delete=models.CASCADE, 
+    employee_id = models.CharField(max_length=255, null=True, blank=True)
+    user = models.OneToOneField('auth_user.Customuser', on_delete=models.CASCADE, 
                             null=False, blank=False, related_name="employee")
     role = models.ForeignKey('office.CompanyRole', on_delete=models.CASCADE,
                               related_name='employee_role', null=True, blank=True)
-    office = models.ManyToManyField('office.Office', related_name='employee_offices',)
+    company = models.ForeignKey('office.Company', on_delete=models.CASCADE, 
+                                related_name='employee_company',)
 
 
 class InviteEmployee(BaseModel):
