@@ -47,7 +47,7 @@ class OfficeApiView(viewsets.ModelViewSet):
         
         return Response(serializer.data, status=status.HTTP_200_OK)
         
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = OfficeAndBankAccountsSerializer(data=request.data)
 
         # Add request to serializer context

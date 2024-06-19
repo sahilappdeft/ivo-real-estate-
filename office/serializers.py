@@ -61,7 +61,7 @@ class OfficeAndBankAccountsSerializer(serializers.Serializer):
         office_data = validated_data.pop('office')
         bank_accounts_data = validated_data.pop('bank_accounts')
         invite_employees_data = validated_data.pop('invite_employee')
-        add_employees_data = validated_data.pop('add_employee')
+        add_employees_data = validated_data.pop('add_employee', [])
         
         # get request user
         user = self.context['request'].user

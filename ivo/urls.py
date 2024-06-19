@@ -25,6 +25,8 @@ urlpatterns = [
     path('', Login.as_view(), name='login'),
     path('api/auth/', include('auth_user.urls'), name='auth'),
     path('api/office/', include('office.urls'), name='office'),
+    path('api/', include('real-estate.property.urls'), name='office'),
+
 ]
 
 # Static and media URL configurations

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'auth_user',
     'office',
     'employee',
+    'real-estate.property'
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # 'utility.middlewares.CustomResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'ivo.urls'
