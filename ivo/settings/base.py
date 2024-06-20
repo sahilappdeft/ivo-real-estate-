@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000/"
+    "http://localhost:3000"
 ]
 
 # Application definition
