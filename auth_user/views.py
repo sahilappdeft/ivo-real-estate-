@@ -218,7 +218,7 @@ class ForgotPassword(APIView):
             'email': str(data.get('email')),
             'password': str(data.get('password')),
             'otp': str(data.get('otp')),
-            'confirm_password': str( data.get('confirm_Password'))
+            'confirm_password': str( data.get('confirm_password'))
         }
         
         # Make a POST request to the FastAPI microservice
