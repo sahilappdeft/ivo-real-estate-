@@ -34,14 +34,14 @@ class RegisterUser(APIView):
             # Email is required
             return Response(error("Email is required", {}), status=status.HTTP_400_BAD_REQUEST)
         
-        if data.get('password') != data.get('confirmPassword'):
+        if data.get('password') != data.get('confirm_password'):
             # Password should same to confirm password
             return Response(error("confirm password does not match password", {}), status=status.HTTP_400_BAD_REQUEST)
 
         
         #hit request to auth microservice
         response = call_auth_microservice('/signup', data)
-        
+        print(response, ":::::::::::::::::::::::::::::::::;")
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
@@ -218,7 +218,7 @@ class ForgotPassword(APIView):
             'email': str(data.get('email')),
             'password': str(data.get('password')),
             'otp': str(data.get('otp')),
-            'confirm_password': str( data.get('confirmPassword'))
+            'confirm_password': str( data.get('confirm_Password'))
         }
         
         # Make a POST request to the FastAPI microservice
