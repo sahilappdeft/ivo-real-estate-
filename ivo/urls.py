@@ -22,7 +22,7 @@ from auth_user.views import Login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Login.as_view(), name='login'),
+    # path('', Login.as_view(), name='login'),
     path('api/auth/', include('auth_user.urls'), name='auth'),
     path('api/office/', include('office.urls'), name='office'),
     path('api/', include('real-estate.property.urls'), name='office'),
