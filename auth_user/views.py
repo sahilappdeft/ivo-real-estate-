@@ -15,7 +15,7 @@ from .models import CustomUser
 from .serializers import CustomUserSerializer
 from .permission import IsTokenValid
 from employee.models import InviteEmployee, Employee
-from office.models import OfficeEmployee
+from office.models import OfficeEmployee, Company, CompanyRole
 
 # Define Django views that communicate with FastAPI endpoints
 
@@ -57,6 +57,13 @@ class RegisterUser(APIView):
             # Send OTP to user for email verification
             send_verify_email('Confirm your email', [response_data.get('email')],
                               response_data.get('otp'), response_data.get('first_name'))
+            
+            company = Company.objects.create(user=user)
+            # get admin role of company
+            role = CompanyRole.objects.get(name='admin')
+            # creae employe object for admin
+            employee = Employee.objects.create(company=company,user=user,
+                                role=role)
 
             # Registration Successful
             return Response({"message": "Registration Successful"}, status=status.HTTP_200_OK)
