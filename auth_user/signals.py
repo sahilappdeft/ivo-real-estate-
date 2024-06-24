@@ -11,7 +11,8 @@ def create_company(sender, instance, created, **kwargs):
     if created:
         if instance.role == 'company':
             # Create a company instance associated with the user
-            Company.objects.create(user=instance)
+            # Company.objects.create(user=instance)
+            pass
         elif instance.role == 'employee':
             # Create a Employee instance associated with the user
             Employee.objects.create(user=instance)

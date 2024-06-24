@@ -60,7 +60,11 @@ class RegisterUser(APIView):
             
             company = Company.objects.create(user=user)
             # get admin role of company
-            role = CompanyRole.objects.get(name='admin')
+            role = CompanyRole.objects.filter(name='admin')
+            
+            if role.exists():
+                role = role.first()  # or handle according to your logic
+            
             # creae employe object for admin
             employee = Employee.objects.create(company=company,user=user,
                                 role=role)
