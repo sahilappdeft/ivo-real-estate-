@@ -1,3 +1,5 @@
+from django.db import transaction
+
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -11,7 +13,7 @@ from rest_framework.decorators import action
 
 from utility.helpers import success, error
 from auth_user.permission import IsTokenValid, token_required
-from .models import Office, CompanyRole, OfficeUnit, Company
+from .models import Office, CompanyRole, OfficeUnit, Company, BankAccounts
 from .serializers import (OfficeSerializer, OfficeAndBankAccountsSerializer,
                           CompanyRoleSerializer, OfficeUnitSerializer, OfficeSerializer,
                           DetailedOfficeSerializer, DetailCompanyRoleSerializer
@@ -19,6 +21,9 @@ from .serializers import (OfficeSerializer, OfficeAndBankAccountsSerializer,
 from .filters import OfficeFilter
 
 class OfficeApiView(viewsets.ModelViewSet):
+    '''
+    This class provide the crud of the Office.
+    '''
     serializer_class = OfficeSerializer
     permission_classes = (IsTokenValid,)
     filterset_class = OfficeFilter
@@ -63,6 +68,56 @@ class OfficeApiView(viewsets.ModelViewSet):
         serializer = DetailedOfficeSerializer(instance)
         return Response(serializer.data)
     
+    # def update(self, request, *args, **kwargs):
+        
+    #     instance = self.get_object()
+    #     data = request.data.copy()
+    #     serializer = OfficeAndBankAccountsSerializer(instance, data=request.data)
+    #     bank_accounts_data = data.pop('bank_accounts', [])
+    #     add_employees_data = data.pop('add_employee', [])
+    #     if serializer.is_valid():
+    #         try:
+    #             with transaction.atomic():
+    #                 data = serializer.save()
+
+    #                 # Update or create rooms for the building unit
+    #                 for bank_account_data in bank_accounts_data:
+    #                     room_id = bank_account_data.pop('id', None)
+    #                     is_delete = bank_account_data.pop('is_delete', False)
+    #                     if room_id and not is_delete:
+    #                         room_instance, created = Room.objects.update_or_create(
+    #                             id=room_id,
+    #                             defaults={**bank_account_data, 'building_unit': instance}
+    #                         )
+    #                     elif is_delete:
+    #                         Room.objects.get(id=room_id).soft_delete()
+    #                     else:
+    #                         Room.objects.create(building_unit=instance, **bank_account_data)
+
+    #                 # Update or create energy meters for the building unit
+    #                 for add_employee_data in add_employees_data:
+    #                     energy_meter_id = add_employee_data.pop('id', None)
+    #                     is_delete = add_employee_data.pop('is_delete', False)
+    #                     if energy_meter_id and not is_delete:
+    #                         energy_meter_instance, created = EnergyMeter.objects.update_or_create(
+    #                             id=energy_meter_id,
+    #                             defaults={**add_employee_data, 'building_unit': instance}
+    #                         )
+    #                     elif is_delete:
+    #                         EnergyMeter.objects.get(id=energy_meter_id,).soft_delete()
+    #                     else:
+    #                         EnergyMeter.objects.create(building_unit=instance, **add_employee_data)
+                            
+    #                 return Response(data, status=status.HTTP_201_CREATED)
+    #         except Room.DoesNotExist:
+    #             return Response("Room id not found", status=status.HTTP_400_BAD_REQUEST)
+    #         except EnergyMeter.DoesNotExist:
+    #             return Response("Energy id not found", status=status.HTTP_400_BAD_REQUEST)
+    #         except Exception as e:
+    #             print(e)
+    #             return Response("something went wrong", status=status.HTTP_400_BAD_REQUEST)
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CompanyRoleViewSet(viewsets.ModelViewSet):
     '''
@@ -102,6 +157,7 @@ class CompanyRoleViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = DetailCompanyRoleSerializer(instance)
         return Response(serializer.data)
+
 
 class OfficeUnitViewSet(viewsets.ModelViewSet):
     '''

@@ -51,14 +51,24 @@ class GetOfficeEmployeeSeriliazer(serializers.ModelSerializer):
         return data
 
 
-class OfficeAndBankAccountsSerializer(serializers.Serializer):
-    office = OfficeSerializer()
+class OfficeAndBankAccountsSerializer(serializers.ModelSerializer):
+    # office = OfficeSerializer()
+    office_unit = serializers.CharField(source='office_units.first.name', read_only=True)
+    employee =  serializers.SerializerMethodField(read_only=True)
     bank_accounts = BankAccountsSerializer(many=True)
     invite_employee = InviteEmployeeSerializer(many=True)
     add_employee = OfficeEmployeeSeriliazer(required=False, many=True)
+
+    class Meta:
+        model = Office
+        exclude = ['company', 'user']
+        extra_kwargs = {
+            'user': {'read_only': True},
+            'company': {'read_only': True}
+        }
     
     def create(self, validated_data):
-        office_data = validated_data.pop('office')
+        # office_data = validated_data.pop('office')
         bank_accounts_data = validated_data.pop('bank_accounts')
         invite_employees_data = validated_data.pop('invite_employee')
         add_employees_data = validated_data.pop('add_employee', [])
@@ -82,7 +92,7 @@ class OfficeAndBankAccountsSerializer(serializers.Serializer):
                                         role=role)
             
                 # Create office object without saving to the database
-                office = Office.objects.create(user=user, company=company, **office_data)
+                office = Office.objects.create(user=user, company=company, **validated_data)
 
                 # Create bank accounts for the office 
                 for bank_account_data in bank_accounts_data:

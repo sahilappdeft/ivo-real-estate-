@@ -31,6 +31,8 @@ class Property(BaseModel):
     country = models.CharField(max_length=255)
     office = models.ForeignKey('office.Office', on_delete=models.CASCADE, null=False,
                                blank=False, related_name='offic_property')
+    building = models.ForeignKey('Building', on_delete=models.CASCADE, null=False,
+                               blank=False, related_name='building_property')
 
     def __str__(self) -> str:
         return str(self.id)
@@ -82,7 +84,7 @@ class Room(BaseModel):
         return str(self.building_unit.id)
     
 
-class EnergyTable(models.Model):
+class EnergyMeter(models.Model):
     PURPOSE_CHOICES = [
         ("Heat", "Heat"),
         ("Electricity", "Electricity"),
