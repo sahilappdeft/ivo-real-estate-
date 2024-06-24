@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-l&2=xd$u9w9fr*9z$h1wecvagy9a%sn9yot(7(9zo*c-)u0u16
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', "http://localhost:3000"]
+ALLOWED_HOSTS = ['*', "http://localhost:3000", "https://ivo.vinnisoft.com"]
 
 
 # Application definition
@@ -160,5 +160,6 @@ AUTH_USER_MODEL = 'auth_user.Customuser'
 # CORS_ALLOW_ALL_ORIGINS = True
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://ivo.vinnisoft.com"
 ]
