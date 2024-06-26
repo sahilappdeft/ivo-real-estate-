@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'employee',
 #     'real_estate.property',
 #     'real_estate.landlord'
-# ]
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
