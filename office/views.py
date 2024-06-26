@@ -1,5 +1,6 @@
-from django.db import transaction
+import json
 
+from django.db import transaction
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -54,7 +55,10 @@ class OfficeApiView(viewsets.ModelViewSet):
         return Response(success("success", serializer.data), status=status.HTTP_200_OK)
         
     def create(self, request, *args, **kwargs):
-        serializer = OfficeAndBankAccountsSerializer(data=request.data)
+        print(request.data, "::::::::::::::::::::::::::::")
+        data = json.load(request.data)
+        print(data, "++++++++++=======================================")
+        serializer = OfficeAndBankAccountsSerializer(data=data)
 
         # Add request to serializer context
         serializer.context['request'] = request
