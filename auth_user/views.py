@@ -55,6 +55,7 @@ class RegisterUser(APIView):
                                                                         'email': email,
                                                                         'first_name': first_name,
                                                                         'last_name': last_name,
+                                                                        'is_onboarding':True
                                                                     })
 
             # Send OTP to user for email verification

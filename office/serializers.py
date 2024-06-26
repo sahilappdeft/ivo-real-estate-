@@ -114,6 +114,9 @@ class OfficeAndBankAccountsSerializer(serializers.ModelSerializer):
             
             return serializers.ValidationError("Failed to create office, bank accounts, or invite employees")
 
+        # update user onbarding to False
+        user.is_onboarding = False
+        user.save()
         return {
                 'office': OfficeSerializer(office).data,
                 }
