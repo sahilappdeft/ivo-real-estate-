@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'office',
     'employee',
     'real-estate.property',
-    'real-estate.landlord'
+    # 'real-estate.landlord'
 ]
 
 MIDDLEWARE = [
