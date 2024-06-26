@@ -42,6 +42,7 @@ class CustomUser(AbstractUser, BaseModel):
     last_name =models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     is_onboarding = models.BooleanField(default=False)
+    
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

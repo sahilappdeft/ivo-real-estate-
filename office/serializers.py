@@ -11,7 +11,8 @@ from employee.models import InviteEmployee, Employee
 class OfficeSerializer(serializers.ModelSerializer):
     office_unit = serializers.CharField(source='office_units.first.name', read_only=True)
     employee =  serializers.SerializerMethodField(read_only=True)
-    
+    onboarding = serializers.BooleanField(source='user.is_onboarding', read_only=True)
+
     class Meta:
         model = Office
         exclude = ['company', 'user']
