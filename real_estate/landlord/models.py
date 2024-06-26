@@ -31,5 +31,16 @@ class LandlordBankAccounts(BaseModel):
         return self.landlord.landlord_name
     
     
-class LandlordContacts(BaseModel):
-    pass
+class LandlordContacts(models.Model):
+    landord = models.ForeignKey('Landlord', on_delete=models.CASCADE, null=False,
+                               blank=False, related_name='landlord_contats')
+    type = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=100, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    office_phone = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+    

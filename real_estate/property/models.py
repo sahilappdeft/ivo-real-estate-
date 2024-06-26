@@ -33,6 +33,8 @@ class Property(BaseModel):
                                blank=False, related_name='offic_property')
     building = models.ForeignKey('Building', on_delete=models.CASCADE, null=False,
                                blank=False, related_name='building_property')
+    landlord = models.ForeignKey('landlord.Landlord', on_delete=models.CASCADE, null=True,
+                                 blank=True, related_name='property_landlord')
 
     def __str__(self) -> str:
         return str(self.id)

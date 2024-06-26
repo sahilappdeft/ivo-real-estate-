@@ -38,7 +38,7 @@ class CustomUser(AbstractUser, BaseModel):
     is_active = models.BooleanField(default=True)
     first_name = models.CharField(max_length=100)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES,
-                            default="company", null=False, blank=False)
+                            default="Admin", null=False, blank=False)
     last_name =models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     objects = CustomUserManager()

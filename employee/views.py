@@ -88,7 +88,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             try:
                 with transaction.atomic():
                     #create user wih response User-ID.
-                    user = CustomUser.objects.create(user_id=user_id, email=email,
+                    user = CustomUser.objects.create(user_id=user_id, role="user", email=email,
                                                     first_name=first_name, last_name=last_name,)
                     
                     # Get Role

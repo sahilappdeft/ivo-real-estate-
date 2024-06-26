@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     'auth_user',
     'office',
     'employee',
-#     'real_estate.property',
-#     'real_estate.landlord'
+    'real_estate.property',
+    'real_estate.landlord'
 ]
 
 MIDDLEWARE = [
