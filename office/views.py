@@ -56,7 +56,7 @@ class OfficeApiView(viewsets.ModelViewSet):
         
     def create(self, request, *args, **kwargs):
         print(request.data, "::::::::::::::::::::::::::::")
-        data = json.load(request.data)
+        data = json.loads(request.data)
         print(data, "++++++++++=======================================")
         serializer = OfficeAndBankAccountsSerializer(data=data)
 
