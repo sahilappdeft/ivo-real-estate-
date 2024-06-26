@@ -28,7 +28,9 @@ SECRET_KEY = 'django-insecure-l&2=xd$u9w9fr*9z$h1wecvagy9a%sn9yot(7(9zo*c-)u0u16
 DEBUG = True
 
 ALLOWED_HOSTS = ['ivoapi.vinnisoft.com', "localhost", "127.0.0.1"]
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://ivoapi.vinnisoft.com'
+]
 
 # Application definition
 
