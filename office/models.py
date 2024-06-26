@@ -14,6 +14,8 @@ class Company(BaseModel):
     user = models.OneToOneField('auth_user.Customuser', on_delete=models.SET_NULL, 
                                 null=True, blank=True, related_name='company_user')
 
+    def __str__(self) -> str:
+        return self.user.email
 
 class OfficeUnit(BaseModel):
     name = models.CharField(max_length=255, null=False, blank=False)

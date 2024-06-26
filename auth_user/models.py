@@ -4,20 +4,18 @@ from utility.models import BaseModel
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None):
+    def create_user(self, email=None, password=None):
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(
-            username=self.normalize_email(email),
             email=self.normalize_email(email),
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password=None):
+    def create_superuser(self, email=None, password=None):
         user = self.create_user(
-            username=email,
             email=email,
             password=password,
         )
@@ -49,4 +47,4 @@ class CustomUser(AbstractUser, BaseModel):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return str(self.user_id)
+        return str(self.email)

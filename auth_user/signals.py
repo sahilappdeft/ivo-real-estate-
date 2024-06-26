@@ -6,19 +6,19 @@ from office.models import Company
 from employee.models import Employee, InviteEmployee
 from .utilis import get_user_info
 
-@receiver(post_save, sender=CustomUser)
-def create_company(sender, instance, created, **kwargs):
-    if created:
-        if instance.role == 'company':
-            # Create a company instance associated with the user
-            # Company.objects.create(user=instance)
-            pass
-        elif instance.role == 'employee':
-            # Create a Employee instance associated with the user
-            Employee.objects.create(user=instance)
+# @receiver(post_save, sender=CustomUser)
+# def create_company(sender, instance, created, **kwargs):
+#     if created:
+#         if instance.role == 'company':
+#             # Create a company instance associated with the user
+#             # Company.objects.create(user=instance)
+#             pass
+#         elif instance.role == 'employee':
+#             # Create a Employee instance associated with the user
+#             Employee.objects.create(user=instance)
 
-            # # get user from auth micro-service
-            # user = get_user_info(instance.user_id)
+#             # get user from auth micro-service
+#             user = get_user_info(instance.user_id)
             
-            # # get invite employee object
-            # InviteEmployee.objects.filter()
+#             # get invite employee object
+#             InviteEmployee.objects.filter()

@@ -41,40 +41,49 @@ class RegisterUser(APIView):
         
         #hit request to auth microservice
         response = call_auth_microservice('/signup', data)
-        print(response, ":::::::::::::::::::::::::::::::::;")
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
             user_id = response_data.get('id')
             email = response_data.get('email')
-            first_name = response_data.get('first_name')
-            last_name = response_data.get('last_name')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
 
             #create user wih response User-ID.
-            user = CustomUser.objects.create(user_id=user_id, email=email,
-                                             first_name=first_name, last_name=last_name,)
+            user, created = CustomUser.objects.update_or_create(user_id=user_id,
+                                                                defaults={
+                                                                        'email': email,
+                                                                        'first_name': first_name,
+                                                                        'last_name': last_name,
+                                                                    })
 
             # Send OTP to user for email verification
             send_verify_email('Confirm your email', [response_data.get('email')],
                               response_data.get('otp'), response_data.get('first_name'))
             
-            company = Company.objects.create(user=user)
-            # get admin role of company
-            role = CompanyRole.objects.filter(name='admin')
+            if created:
+                company = Company.objects.create(user=user)
+                
+                try:
+                    roles = CompanyRole.objects.filter(name='admin')
+                    if roles.exists():
+                        role = roles.first()
+                        print("role->>>>>>", role)
+                    else:
+                        return Response(error("No admin role found", {}), status=status.HTTP_400_BAD_REQUEST)
+                except CompanyRole.DoesNotExist:
+                    return Response(error("Admin role does not exist", {}), status=status.HTTP_400_BAD_REQUEST)
             
-            if role.exists():
-                role = role.first()  # or handle according to your logic
-            
-            # creae employe object for admin
-            employee = Employee.objects.create(company=company,user=user,
-                                role=role)
+                # creae employe object for admin
+                employee = Employee.objects.create(company=company,user=user,
+                                    role=role)
 
             # Registration Successful
-            return Response({"message": "Registration Successful"}, status=status.HTTP_200_OK)
+            return Response(success("Registration Successful", {}), status=status.HTTP_200_OK)
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
 
 
 class VerifyEmail(APIView):
@@ -83,7 +92,8 @@ class VerifyEmail(APIView):
     """
     def post(self, request):
         data = request.data
-
+        data = data.copy()
+        data['type'] = 'verify'
         if not 'otp' in data:
             # Otp is required
             return Response(error("Otp is required.", {}), status=status.HTTP_400_BAD_REQUEST)
@@ -93,18 +103,50 @@ class VerifyEmail(APIView):
             return Response(error("Email is required", {}), status=status.HTTP_400_BAD_REQUEST)
 
         #hit request to auth microservice
-        response = call_auth_microservice('/verify-email', data)
+        response = call_auth_microservice('/verify-otp', data)
 
         # Check if the response is successful
         if response.status_code == 200:
             response_data = response.json()
             message = response_data.get('message')
             # Registration Successful
-            return Response({"message": message}, status=status.HTTP_200_OK)
+            return Response(success(message, {}), status=status.HTTP_200_OK)
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
+        
+
+class VerifyOtp(APIView):
+    """
+    API endpoint for verifying user email.
+    """
+    def post(self, request):
+        data = request.data
+        data = data.copy()
+        data['type'] = 'forgot'
+        
+        if not 'otp' in data:
+            # Otp is required
+            return Response(error("Otp is required.", {}), status=status.HTTP_400_BAD_REQUEST)
+        
+        if not 'email' in data:
+            # Email is required
+            return Response(error("Email is required", {}), status=status.HTTP_400_BAD_REQUEST)
+
+        #hit request to auth microservice
+        response = call_auth_microservice('/verify-otp', data)
+
+        # Check if the response is successful
+        if response.status_code == 200:
+            response_data = response.json()
+            message = response_data.get('message')
+            # Registration Successful
+            return Response(success(message, {}), status=status.HTTP_200_OK)
+        else:
+            # Return error from the authentication microservice
+            error_message = response.json().get('detail', 'Unknown error')
+            return Response(error(error_message, {}), status=response.status_code)
 
 
 class Login(APIView):
@@ -135,7 +177,7 @@ class Login(APIView):
             response_data['user']=user_serliaze_data.data
             
             # Registration Successful
-            return Response({"message": "Login sucessfully", "data":response_data}, status=status.HTTP_200_OK)
+            return Response(success("Login sucessfully", response_data), status=status.HTTP_200_OK)
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')
@@ -168,10 +210,10 @@ class ChangePassword(APIView):
             response_data = response.json()
             message = response_data.get('message')
             # Change password successfully Successful
-            return Response({"message": message}, status=status.HTTP_200_OK)
+            return Response(success(message, {}), status=status.HTTP_200_OK)
         else:
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
 
 
 class SendOtp(APIView):
@@ -211,10 +253,10 @@ class SendOtp(APIView):
                               response_data.get('otp'), response_data.get('first_name'))
 
             # Otp send successfully 
-            return Response({"message": "Otp send successfully"}, status=status.HTTP_200_OK)
+            return Response(success("Otp send successfully", {}), status=status.HTTP_200_OK)
         else:
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
         
 
 class ForgotPassword(APIView):
@@ -240,10 +282,10 @@ class ForgotPassword(APIView):
             response_data = response.json()
             message = response_data.get('message')
             # Change password successfully Successful
-            return Response({"message": message}, status=status.HTTP_200_OK)
+            return Response(success(message, {}), status=status.HTTP_200_OK)
         else:
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
     
 
 class SetupAccount(APIView):
@@ -257,48 +299,50 @@ class SetupAccount(APIView):
         data = request.data.copy()
         # get invite employee objet
         invite_token = request.query_params.get('token')
-        print(invite_token, "invite_token invite_token")
-        invite_employe = InviteEmployee.objects.filter(token=invite_token).first()
         
-        if invite_employe:
-            email = invite_employe.recipient_email
-        
-            data['email'] = email
-            data['email_verified'] = True
-            #hit request to auth microservice
-            response = call_auth_microservice('/signup', data)
+        with transaction.atomic():        
+            invite_employe = InviteEmployee.objects.filter(token=invite_token).first()
+            invite_employe.status = "accepted"
+            invite_employe.save()
+            if invite_employe:
+                email = invite_employe.recipient_email
+            
+                data['email'] = email
+                data['email_verified'] = True
+                #hit request to auth microservice
+                response = call_auth_microservice('/signup', data)
 
-            print(data, "datadatadata")
-            # Check if the response is successful
-            if response.status_code == 200:
-                response_data = response.json()
-                user_id = response_data.get('id')
-                email = response_data.get('email')
-                
-                try:
-                    with transaction.atomic():
-                        #create user wih response User-ID.
-                        user = CustomUser.objects.create(user_id=user_id, role="user", email=email)
-                        
-                        # get or create employee obj with company
-                        employee = Employee.objects.get_or_create(user=user)
-                        employee.role = invite_employe.role
-                        employee.company = invite_employe.sender.company
-                        employee.save()
-                        
-                        # assign employee to office
-                        OfficeEmployee.objects.get_or_create(employee=employee, office=invite_employe.sender)
-                        
-                        # set-up sucessfully
-                        return Response({"message": "Account Set-up Successfully"}, status=status.HTTP_200_OK)
-                except Exception as e:
-                    return Response({"error": "Something went wrong while setu-up account"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                print(data, "datadatadata")
+                # Check if the response is successful
+                if response.status_code == 200:
+                    response_data = response.json()
+                    user_id = response_data.get('id')
+                    email = response_data.get('email')
+                    
+                    try:
+                        with transaction.atomic():
+                            #create user wih response User-ID.
+                            user = CustomUser.objects.create(user_id=user_id, role="user", email=email)
+                            
+                            # get or create employee obj with company
+                            employee = Employee.objects.get_or_create(user=user)
+                            employee.role = invite_employe.role
+                            employee.company = invite_employe.sender.company
+                            employee.save()
+                            
+                            # assign employee to office
+                            OfficeEmployee.objects.get_or_create(employee=employee, office=invite_employe.sender)
+                            
+                            # set-up sucessfully
+                            return Response(success("Account Set-up Successfully"), status=status.HTTP_200_OK)
+                    except Exception as e:
+                        return Response(error("Something went wrong while setu-up account", {}), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    # Return error from the authentication microservice
+                    error_message = response.json().get('detail', 'Unknown error')
+                    return Response(error(error_message, {}), status=response.status_code)
             else:
-                # Return error from the authentication microservice
-                error_message = response.json().get('detail', 'Unknown error')
-                return Response({"error": error_message}, status=response.status_code)
-        else:
-            return Response({"error": "Invalid invitation"}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response(error("Invalid invitation", {}), status=status.HTTP_401_UNAUTHORIZED)
         
         
 from auth_user.permission import IsTokenValid, token_required

@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 
 from utility.helpers import success, error
+from office.models import Company
 from auth_user.permission import IsTokenValid
 from .models import Building, Property, BuildingUnit, Room, EnergyMeter
 from .serializers import (BuildingSerializer, PropertySerializer, BuildingUnitRoomMeterSerializer,
@@ -24,13 +26,14 @@ class BuildingViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         company_id = kwargs.get('company', None)
         
-        if not company_id:
-            # not company id return error 
-            return Response(error('Company not found', {}), status=status.HTTP_404_NOT_FOUND)
+        try:
+            company = Company.objects.get(id=company_id)
+        except Company.DoesNotExist:
+            return Response(error("Company not found.", {}), status=status.HTTP_404_NOT_FOUND)
     
-        queryset = self.queryset.filter(company__id=company_id)
+        queryset = self.queryset.filter(company=company)
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(success("success", serializer.data))
     
     
 class PropertyViewSet(viewsets.ModelViewSet):
@@ -44,13 +47,14 @@ class PropertyViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         company_id = kwargs.get('company', None)
         
-        if not company_id:
-            # not company id return error 
-            return Response(error('Company not found', {}), status=status.HTTP_404_NOT_FOUND)
+        try:
+            company = Company.objects.get(id=company_id)
+        except Company.DoesNotExist:
+            return Response(error("Company not found.", {}), status=status.HTTP_404_NOT_FOUND)
     
-        queryset = self.queryset.filter(building__company__id=company_id)
+        queryset = self.queryset.filter(building__company=company)
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(success("success", serializer.data))
     
 
 class BuildingUnitViewset(viewsets.ModelViewSet):
@@ -66,8 +70,8 @@ class BuildingUnitViewset(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             data = serializer.save()
-            return Response(data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(success("success", data), status=status.HTTP_201_CREATED)
+        return Response(error(serializer.errors, {}), status=status.HTTP_400_BAD_REQUEST)
     
     
     def update(self, request, *args, **kwargs):
@@ -110,15 +114,15 @@ class BuildingUnitViewset(viewsets.ModelViewSet):
                         else:
                             EnergyMeter.objects.create(building_unit=instance, **energy_meter_data)
                             
-                    return Response(data, status=status.HTTP_201_CREATED)
+                    return Response(success("success", data), status=status.HTTP_201_CREATED)
             except Room.DoesNotExist:
-                return Response("Room id not found", status=status.HTTP_400_BAD_REQUEST)
+                return Response(error("Room id not found", {}), status=status.HTTP_400_BAD_REQUEST)
             except EnergyMeter.DoesNotExist:
-                return Response("Energy id not found", status=status.HTTP_400_BAD_REQUEST)
+                return Response(error("Energy id not found", {}), status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 print(e)
-                return Response("something went wrong", status=status.HTTP_400_BAD_REQUEST)
+                return Response(error("something went wrong", {}), status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(error(serializer.errors, {}), status=status.HTTP_400_BAD_REQUEST)
 
     

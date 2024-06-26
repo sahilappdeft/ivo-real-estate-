@@ -26,7 +26,12 @@ class DetailEmployeeSerializer(serializers.ModelSerializer):
     
     def get_offices(self, instance):
         
-        offices = instance.employee_office
-        if offices:
-            return offices
+        offices = instance.employee_office.all()
+        for office in offices:
+            if office:
+                return {
+                    "id": office.office.id,
+                    "name":office.office.name,
+                    "position":office.position
+                    }
         return []

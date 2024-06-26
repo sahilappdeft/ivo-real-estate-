@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 
 from utility.helpers import success, error, generateOTP
 from utility.fast_api import call_auth_microservice
@@ -18,7 +19,7 @@ from .models import Employee
 from .serializers import EmployeeSerializer, DetailEmployeeSerializer
 # Create your views here.
 
-
+    
 class EmployeeViewSet(viewsets.ModelViewSet):
     '''
     This class provide the crud of the employee.
@@ -27,29 +28,28 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
     permission_classes = (IsTokenValid,)
     
-    def get_queryset(self, request, *args, **kwargs):
+    def get_queryset(self):
         
-        company_id = kwargs.get('company')
+        company_id = self.kwargs.get('company', None)
         try:
             company = Company.objects.get(id=company_id)
         except Company.DoesNotExist:
-            return Response(error('Company not found', {}), status=status.HTTP_404_NOT_FOUND)
-        
+            raise NotFound(error("Company not found.", {}))        
         return Employee.objects.filter(company=company)
     
     def destroy(self, request, company=None, pk=None):
         try:
             company_role = self.get_queryset().get(pk=pk)
         except Employee.DoesNotExist:
-            return Response({"error": "Employee found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(error("Employee found", {}), status=status.HTTP_404_NOT_FOUND)
         
         company_role.soft_delete()
-        return Response({"message": "Deleted Sucessfully"}, status=status.HTTP_204_NO_CONTENT)
+        return Response(success("Deleted Sucessfully", {}), status=status.HTTP_204_NO_CONTENT)
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = DetailEmployeeSerializer(instance)
-        return Response(serializer.data)
+        return Response(success("success", serializer.data))
     
     def create(self,  request):
         
@@ -122,7 +122,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
                     send_mail(subject, email, context, template)'''
                     
                     # Registration Successful
-                    return Response({"message": "Employee Added Successful"}, status=status.HTTP_200_OK)
+                    return Response(success("Employee Added Successful", {}), status=status.HTTP_200_OK)
             except Exception as e:
                 print(e)
                 return Response(error('Somethinh went wrong while create employee', {}),
@@ -130,5 +130,5 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
         
