@@ -164,7 +164,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://ivoapi.vinnisoft.com'
 ]
 # CORS settings
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "https://ivo.vinnisoft.com"
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://ivo.vinnisoft.com"
+]
