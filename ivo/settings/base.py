@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'auth_user',
     'office',
     'employee',
-    'real-estate.property',
-    # 'real-estate.landlord'
-]
+#     'real_estate.property',
+#     'real_estate.landlord'
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -166,7 +166,5 @@ CSRF_TRUSTED_ORIGINS = [
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://localhost:3000/",
     "https://ivo.vinnisoft.com"
-    "https://ivo.vinnisoft.com/"
 ]
