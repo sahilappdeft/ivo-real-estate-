@@ -62,7 +62,7 @@ class OfficeApiView(viewsets.ModelViewSet):
         
         if serializer.is_valid():
             data = serializer.save()
-            return Response(success("success", data), status=status.HTTP_201_CREATED)
+            return Response(success("Office created sucessfuly", data), status=status.HTTP_201_CREATED)
         return Response(error(serializer.errors, {}), status=status.HTTP_400_BAD_REQUEST)
     
     def retrieve(self, request, *args, **kwargs):
