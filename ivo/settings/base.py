@@ -28,9 +28,7 @@ SECRET_KEY = 'django-insecure-l&2=xd$u9w9fr*9z$h1wecvagy9a%sn9yot(7(9zo*c-)u0u16
 DEBUG = True
 
 ALLOWED_HOSTS = ['ivoapi.vinnisoft.com', "localhost", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = [
-    'https://ivoapi.vinnisoft.com'
-]
+
 
 # Application definition
 
@@ -48,7 +46,8 @@ INSTALLED_APPS = [
     'auth_user',
     'office',
     'employee',
-    'real-estate.property'
+    'real-estate.property',
+    'real-estate.landlord'
 ]
 
 MIDDLEWARE = [
@@ -159,7 +158,11 @@ print( os.environ.get('FASTAPI_BASE_URL'))
 AUTH_USER_MODEL = 'auth_user.Customuser' 
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    'https://ivoapi.vinnisoft.com'
+]
 # CORS settings
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",
