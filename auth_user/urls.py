@@ -7,7 +7,7 @@ urlpatterns = [
     path('verify-otp/', views.VerifyOtp.as_view(), name='verify_otp'),
     path('setup-account/', views.SetupAccount.as_view(), name='setup-account'),
     path('login/', views.Login.as_view(), name='login'),
-    path('user-by-email/', views.GetUserByEmail.as_view(), name='user-by-email'),
+    path('check-user', views.GetUserByEmail.as_view(), name='user-by-email'),
     
     path('change-password/', views.ChangePassword.as_view(), name='change_password'),
     path('send-otp/<str:type>/', views.SendOtp.as_view(), name='send-otp' ),
