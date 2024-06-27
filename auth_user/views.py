@@ -184,7 +184,7 @@ class Login(APIView):
         else:
             # Return error from the authentication microservice
             error_message = response.json().get('detail', 'Unknown error')
-            return Response({"error": error_message}, status=response.status_code)
+            return Response(error(error_message, {}), status=response.status_code)
         
 
 class ChangePassword(APIView):
