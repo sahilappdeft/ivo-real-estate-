@@ -126,6 +126,7 @@ class VerifyOtp(APIView):
         data = request.data
         data = data.copy()
         type = self.kwargs.get('type')
+        print(type, "PPPPPPPPPPPPPPPP")
         data['type'] = type
         
         if not 'otp' in data:
@@ -272,7 +273,6 @@ class ForgotPassword(APIView):
         data = {
             'email': str(data.get('email')),
             'password': str(data.get('password')),
-            'otp': str(data.get('otp')),
             'confirm_password': str( data.get('confirm_password'))
         }
         
