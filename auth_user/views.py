@@ -345,15 +345,32 @@ class SetupAccount(APIView):
             else:
                 return Response(error("Invalid invitation", {}), status=status.HTTP_401_UNAUTHORIZED)
         
-        
-from auth_user.permission import IsTokenValid, token_required
-from django.utils.decorators import method_decorator
 
 class UserDeleteView(APIView):
     queryset = CustomUser.objects.all()
     
-    @method_decorator(token_required)
     def delete(self, request, *args, **kwargs):
         user = request.user
         user.soft_delete()
         return Response({"success": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+    
+    
+
+class GetUserByEmail(APIView):
+    '''
+    this api check the user existence based on email
+    '''
+    
+    def post(self, request, *args, **kwargs):
+        
+        data = request.data
+        # fetch user with email
+        
+        try:
+            user = CustomUser.objects.get(email=data.get('email'))
+            if user:
+                return Response(error('User already exist', {}), status=status.HTTP_400_BAD_REQUEST)
+        except CustomUser.DoesNotExist:
+            return Response(success('success', {}), status=status.HTTP_200_OK)
+            
+        
