@@ -122,7 +122,7 @@ class VerifyOtp(APIView):
     """
     API endpoint for verifying user email.
     """
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         data = request.data
         data = data.copy()
         type = self.kwargs.get('type')
