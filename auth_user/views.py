@@ -125,7 +125,8 @@ class VerifyOtp(APIView):
     def post(self, request):
         data = request.data
         data = data.copy()
-        data['type'] = 'forgot'
+        type = self.kwargs.get('type')
+        data['type'] = type
         
         if not 'otp' in data:
             # Otp is required
