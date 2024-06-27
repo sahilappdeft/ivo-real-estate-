@@ -365,7 +365,8 @@ class GetUserByEmail(APIView):
         
         data = request.data
         # fetch user with email
-        
+        if 'email' not in data:
+            return Response(error('Email is required', {}), status=status.HTTP_400_BAD_REQUEST)
         try:
             user = CustomUser.objects.get(email=data.get('email'))
             if user:
